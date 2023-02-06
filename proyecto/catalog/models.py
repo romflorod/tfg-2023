@@ -6,10 +6,10 @@ from django.urls import reverse  # To generate URLS by reversing URL patterns
 
 
 class Genre(models.Model):
-    """Model representing a book genre (e.g. Science Fiction, Non Fiction)."""
+    """Model representing a genre (e.g. Masc,Fem , NoBin, Other)."""
     name = models.CharField(
         max_length=200,
-        help_text="Enter a book genre (e.g. Science Fiction, French Poetry etc.)"
+        help_text="Enter your represententing gaming_genre  (e.g. Masc,Fem , NoBin, Other)"
         )
 
     def __str__(self):
@@ -20,7 +20,7 @@ class Genre(models.Model):
 class Language(models.Model):
     """Model representing a Language (e.g. English, French, Japanese, etc.)"""
     name = models.CharField(max_length=200,
-                            help_text="Enter the book's natural language (e.g. English, French, Japanese etc.)")
+                            help_text="Enter preferenceds language (e.g. English, French, Japanese etc.)")
 
     def __str__(self):
         """String for representing the Model object (in Admin site etc.)"""
@@ -30,9 +30,9 @@ class Language(models.Model):
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
     title = models.CharField(max_length=200)
-    author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
-    # Foreign Key used because book can only have one author, but authors can have multiple books
-    # Author as a string rather than object because it hasn't been declared yet in file.
+    gamer = models.ForeignKey('Gamer', on_delete=models.SET_NULL, null=True)
+    # Foreign Key used because book can only have one gamer, but gamers can have multiple books
+    # Gamer as a string rather than object because it hasn't been declared yet in file.
     summary = models.TextField(max_length=1000, help_text="Enter a brief description of the book")
     isbn = models.CharField('ISBN', max_length=13,
                             unique=True,
@@ -44,7 +44,7 @@ class Book(models.Model):
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
     
     class Meta:
-        ordering = ['title', 'author']
+        ordering = ['title', 'gamer']
 
     def display_genre(self):
         """Creates a string for the Genre. This is required to display genre in Admin."""
@@ -104,19 +104,19 @@ class BookInstance(models.Model):
         return '{0} ({1})'.format(self.id, self.book.title)
 
 
-class Author(models.Model):
-    """Model representing an author."""
+class Gamer(models.Model):
+    """Model representing an gamer."""
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)
-    date_of_death = models.DateField('died', null=True, blank=True)
-
+    ingame_name= models.CharField(max_length=100)
+    ingame_tagline= models.CharField(max_length=4)
     class Meta:
         ordering = ['last_name', 'first_name']
 
     def get_absolute_url(self):
-        """Returns the url to access a particular author instance."""
-        return reverse('author-detail', args=[str(self.id)])
+        """Returns the url to access a particular gamer instance."""
+        return reverse('gamer-detail', args=[str(self.id)])
 
     def __str__(self):
         """String for representing the Model object."""

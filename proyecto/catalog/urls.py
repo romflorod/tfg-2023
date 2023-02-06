@@ -7,9 +7,9 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('books/', views.BookListView.as_view(), name='books'),
     path('book/<int:pk>', views.BookDetailView.as_view(), name='book-detail'),
-    path('authors/', views.AuthorListView.as_view(), name='authors'),
-    path('author/<int:pk>',
-         views.AuthorDetailView.as_view(), name='author-detail'),
+    path('gamers/', views.GamerListView.as_view(), name='gamers'),
+    path('gamer/<int:pk>',
+         views.GamerDetailView.as_view(), name='gamer-detail'),
 ]
 
 
@@ -25,11 +25,11 @@ urlpatterns += [
 ]
 
 
-# Add URLConf to create, update, and delete authors
+# Add URLConf to create, update, and delete gamers
 urlpatterns += [
-    path('author/create/', views.AuthorCreate.as_view(), name='author-create'),
-    path('author/<int:pk>/update/', views.AuthorUpdate.as_view(), name='author-update'),
-    path('author/<int:pk>/delete/', views.AuthorDelete.as_view(), name='author-delete'),
+    path('gamer/create/', views.GamerCreate.as_view(), name='gamer-create'),
+    path('gamer/<int:pk>/update/', views.GamerUpdate.as_view(), name='gamer-update'),
+    path('gamer/<int:pk>/delete/', views.GamerDelete.as_view(), name='gamer-delete'),
 ]
 
 # Add URLConf to create, update, and delete books

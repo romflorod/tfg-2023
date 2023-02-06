@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from .models import Book, Author, BookInstance, Genre
+from .models import Book, Gamer, BookInstance, Genre
 
 
 def index(request):
@@ -12,7 +12,7 @@ def index(request):
     num_instances = BookInstance.objects.all().count()
     # Available copies of books
     num_instances_available = BookInstance.objects.filter(status__exact='a').count()
-    num_authors = Author.objects.count()  # The 'all()' is implied by default.
+    num_gamers = Gamer.objects.count()  # The 'all()' is implied by default.
 
     # Number of visits to this view, as counted in the session variable.
     num_visits = request.session.get('num_visits', 1)
@@ -23,7 +23,7 @@ def index(request):
         request,
         'index.html',
         context={'num_books': num_books, 'num_instances': num_instances,
-                 'num_instances_available': num_instances_available, 'num_authors': num_authors,
+                 'num_instances_available': num_instances_available, 'num_gamers': num_gamers,
                  'num_visits': num_visits},
     )
 
@@ -42,15 +42,15 @@ class BookDetailView(generic.DetailView):
     model = Book
 
 
-class AuthorListView(generic.ListView):
-    """Generic class-based list view for a list of authors."""
-    model = Author
+class GamerListView(generic.ListView):
+    """Generic class-based list view for a list of gamers."""
+    model = Gamer
     paginate_by = 10
 
 
-class AuthorDetailView(generic.DetailView):
-    """Generic class-based detail view for an author."""
-    model = Author
+class GamerDetailView(generic.DetailView):
+    """Generic class-based detail view for an Gamer."""
+    model = Gamer
 
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -127,38 +127,39 @@ def renew_book_librarian(request, pk):
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Author
+from .models import Gamer
 
 
-class AuthorCreate(PermissionRequiredMixin, CreateView):
-    model = Author
-    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+class GamerCreate(PermissionRequiredMixin, CreateView):
+    model = Gamer
+    fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death'),'ingame_name','ingame_tagline'
+    ]
     initial = {'date_of_death': '11/06/2020'}
     permission_required = 'catalog.can_mark_returned'
 
 
-class AuthorUpdate(PermissionRequiredMixin, UpdateView):
-    model = Author
+class GamerUpdate(PermissionRequiredMixin, UpdateView):
+    model = Gamer
     fields = '__all__' # Not recommended (potential security issue if more fields added)
     permission_required = 'catalog.can_mark_returned'
 
 
-class AuthorDelete(PermissionRequiredMixin, DeleteView):
-    model = Author
-    success_url = reverse_lazy('authors')
+class GamerDelete(PermissionRequiredMixin, DeleteView):
+    model = Gamer
+    success_url = reverse_lazy('gamers')
     permission_required = 'catalog.can_mark_returned'
 
 
 # Classes created for the forms challenge
 class BookCreate(PermissionRequiredMixin, CreateView):
     model = Book
-    fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
+    fields = ['title', 'gamer', 'summary', 'isbn', 'genre', 'language']
     permission_required = 'catalog.can_mark_returned'
 
 
 class BookUpdate(PermissionRequiredMixin, UpdateView):
     model = Book
-    fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
+    fields = ['title', 'gamer', 'summary', 'isbn', 'genre', 'language']
     permission_required = 'catalog.can_mark_returned'
 
 
