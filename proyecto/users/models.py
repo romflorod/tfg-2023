@@ -9,6 +9,9 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    valorantName = models.TextField(max_length=20, blank=True)
+    valorantTagline = models.TextField(max_length=4, blank=True)
+    valorantRegion = models.TextField(max_length=3, blank=True)
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
