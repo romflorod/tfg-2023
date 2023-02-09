@@ -12,6 +12,10 @@ class Profile(models.Model):
     valorantName = models.TextField(max_length=20, blank=True)
     valorantTagline = models.TextField(max_length=4, blank=True)
     valorantRegion = models.TextField(max_length=3, blank=True)
+    valorantLeague = models.TextField(max_length=40, blank=True)
+    valorantRangue = models.TextField(max_length=40, blank=True)
+    valorantCurrentRR = models.TextField(max_length=40, blank=True)
+    valorantCalculatedElo = models.TextField(max_length=40, blank=True)
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
