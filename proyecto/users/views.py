@@ -6,6 +6,9 @@ from .forms import SignupForm
 def home(request):
     return render(request, 'users/home.html')
 
+def profile(request):
+    return render(request, 'users/profile.html')
+
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
