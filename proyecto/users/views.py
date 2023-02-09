@@ -16,10 +16,15 @@ def signup(request):
             user = form.save()
             user.refresh_from_db()
             user.profile.birth_date = form.cleaned_data.get('birth_date')
-            user.save()
+            user.profile.valorantName = form.cleaned_data.get('valorantName')
+            user.profile.valorantTagline = form.cleaned_data.get('valorantTagline')
+            user.profile.valorantRegion = form.cleaned_data.get('valorantRegion')
+            user.profile.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
+            user.save()
+
             login(request, user)
             return redirect('home')
     else:
