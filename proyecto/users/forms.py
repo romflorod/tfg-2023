@@ -8,7 +8,7 @@ class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=120, help_text='Required. Enter a valid email address.')
     birth_date = forms.DateField(help_text='Required. Format: YYYY-MM-DD')
     valorantName = forms.CharField(max_length=20, required=True, help_text='Required. Enter your valorantname.')
-    valorantTagline = forms.CharField(max_length=4, required=True, help_text='Required. Enter your tagline. Format: AAA')
+    valorantTagline = forms.CharField(max_length=2, required=True, help_text='Required. Enter your tagline. Format: AAA')
     valorantRegion = forms.CharField(max_length=3, required=True, help_text='Required. na, eu, ap, kr. Format: AA')
 
     class Meta:
