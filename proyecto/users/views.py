@@ -2,6 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm
+from users.models import Profile
+
+class EditProfileView():
+    model = Profile
+    template_name = 'editprofile.html'
+    fields = ['birth_date','valorantName','valorantRegion','valorantTagline']
 
 def home(request):
     return render(request, 'users/home.html')

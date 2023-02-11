@@ -3,7 +3,12 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
-
+REGIONCHOICES=[
+        ('NA','NA'),
+        ('EU','EU'),
+        ('AP','AP'),
+        ('KR','KR'),
+]
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
@@ -11,7 +16,7 @@ class Profile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     valorantName = models.TextField(max_length=20, blank=True)
     valorantTagline = models.TextField(max_length=3, blank=True)
-    valorantRegion = models.TextField(max_length=2, blank=True)
+    valorantRegion = models.TextField(blank=True, choices=REGIONCHOICES)
     valorantLeague = models.TextField(max_length=40, blank=True)
     valorantRangue = models.TextField(max_length=40, blank=True)
     valorantCurrentRR = models.TextField(max_length=40, blank=True)
