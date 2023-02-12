@@ -22,13 +22,16 @@ class Profile(models.Model):
     valorantCurrentRR = models.TextField(max_length=40, blank=True)
     valorantCalculatedElo = models.TextField(max_length=40, blank=True)
 
-@receiver(post_save, sender=User)
-def update_user_profile(sender, instance, created, **kwargs):
-    if created:
-         Profile.objects.create(user=instance)
-    instance.profile.save()
-
-    try:
+    @receiver(post_save, sender=User)
+    def update_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
         instance.profile.save()
-    except ObjectDoesNotExist:
-        Profile.objects.create(user=instance)
+
+        try:
+            instance.profile.save()
+        except ObjectDoesNotExist:
+            Profile.objects.create(user=instance)
+
+    def get_absolute_url(self):
+        return "/profile"

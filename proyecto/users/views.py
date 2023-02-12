@@ -3,8 +3,8 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm
 from users.models import Profile
-
-class EditProfileView():
+from django.views.generic.edit import UpdateView
+class EditProfileView(UpdateView):
     model = Profile
     template_name = 'editprofile.html'
     fields = ['birth_date','valorantName','valorantRegion','valorantTagline']
