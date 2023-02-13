@@ -4,19 +4,24 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm
 from users.models import Profile
 from django.views.generic.edit import UpdateView
+import requests
+
 class EditProfileView(UpdateView):
-    model = Profile
-    template_name = 'editprofile.html'
+    print("entro profile edit")
+    model = Profile    
+    template_name = 'editprofile.html'    
     fields = ['birth_date','valorantName','valorantRegion','valorantTagline']
 
 def home(request):
+    print("entro home")
     return render(request, 'users/home.html')
     
 def profile(request):
+    print("entro profile")
     return render(request, 'users/profile.html')
 
 def getStatsCustom(auxList):
-    import requests
+    print("entro stats")
     url= "https://api.kyroskoh.xyz/valorant/v1/mmr/"+auxList[0]+"/"+auxList[1]+"/"+auxList[2]+""
     stat= requests.get(url).text
     stat.strip
@@ -43,7 +48,7 @@ def getStatsCustom(auxList):
         calculatedElo=calculatedElo+700
     if(league=="Radiant"):
         calculatedElo=calculatedElo+800
-    calculatedElo=calculatedElo+int(range)+int(currentRR.replace("RR.",""))         
+    calculatedElo=calculatedElo+int(range)+int(currentRR.replace("RR",""))         
     statlist=[league,range,currentRR,calculatedElo]
     return statlist
  

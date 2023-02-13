@@ -13,7 +13,7 @@
 <br><br>
 <h8> Our calculate elo marca de la casa{{user.profile.valorantCalculatedElo}}</h8>
 
-<a href="{% url 'editprofile' request.user.id %}" class="btn-default nav-link waves-effect" >
+<a href="{% url 'editprofile' request.user.profile.id %}" class="btn-default nav-link waves-effect" >
     @{{user.id}}
     <span class="clearfix d-none d-sm-inline-block"> Edit my profile </span>
 </a>
