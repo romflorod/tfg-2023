@@ -10,6 +10,17 @@
       margin-top: 2.5em !important;
     }
 
+    .navbar-brand{
+      background-size: cover;
+      background-image:url('https://images.alphacoders.com/118/1186644.png');
+      width: 150px;
+      
+    }
+
+    nav ul li{
+      list-style: none;
+    }
+
     .badge.red {
       background: red !important;
     }
@@ -42,17 +53,11 @@
 
     <!-- Brand -->
     <a class="navbar-brand" href="/">
-      <img
-        src="https://images.alphacoders.com/118/1186644.png"
-        width="60" height="60">
       <strong class="blue-text"></strong>
     </a>
 
     <!-- Collapse -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+   
 
     <!-- Links -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -68,10 +73,10 @@
             <a href="{% url 'profile' %} " class="btn-default nav-link waves-effect" >
               <span class="clearfix d-none d-sm-inline-block"> My profile </span>
             </a>
-          </li>
+        </li>
 
         {% if request.user.is_authenticated %}
-        <li class="nav-item">w
+        <li class="nav-item">
           <a href="{% url 'logout' %} " class="btn-default nav-link waves-effect" >
             <span class="clearfix d-none d-sm-inline-block"> Logout </span>
           </a>
@@ -80,21 +85,19 @@
         {% else %}
 
         <li class="nav-item">
-          <a href="{% url 'login' %} " class="btn-default nav-link waves-effect grey" >
+          <a href="{% url 'login' %} " class="btn-default nav-link waves-effect" >
             <span class="clearfix d-none d-sm-inline-block"> Login </span>
           </a>
         </li>
+
         <li class="nav-item">
-          <a href="{% url 'signup' %} " class="btn-default nav-link waves-effect">
+          <a href="{% url 'signup' %}" class="btn-default nav-link waves-effect">
             <span class="clearfix d-none d-sm-inline-block"> Signup </span>
           </a>
         </li>
+
         {% endif %}
       </ul>
     </div>
-  </div>
-
-  </div>
-
   </div>
 </nav>
