@@ -38,7 +38,7 @@ def getStatsCustom(auxList):
         statlist=["error",0,0,0]
     else:
         print("entro bien")
-
+    
         stat= requests.get(url).text
         print(stat)
         stat.strip
@@ -65,7 +65,7 @@ def getStatsCustom(auxList):
             calculatedElo=calculatedElo+700
         if(league=="Radiant"):
             calculatedElo=calculatedElo+800
-        calculatedElo=calculatedElo+int(range)+int(currentRR.replace("RR",""))         
+        calculatedElo=calculatedElo+int(range)+int(currentRR.replace("RR","").replace(".",""))       
         statlist=[league,range,currentRR,calculatedElo]
     return statlist
  
