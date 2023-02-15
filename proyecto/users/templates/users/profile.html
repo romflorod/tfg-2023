@@ -1,41 +1,8 @@
 {% extends 'users/base.html' %}
 
-{% block style %}
-    <style>
-        h1 {
-            text-align: center;
-        }
-        a {
-            display: inline-block;
-            background: #313030;
-            color: #FFF;
-            border: 0;
-            border-radius: 4px;
-            text-align: center;
-            padding: 20px 30px;
-            line-height: 1;
-            text-decoration: none;
-        }
-        a:hover {
-          background: #c7c5c5;
-          color: #313030;
-        }
-        .a2 {
-            margin-left: 1em;
-        }
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            border: 3px solid #313030;
-        }
-    </style>
-{% endblock style %}
 {% block content %}
 {% if user.is_authenticated %}
 <h1>This is the profile page for {{user.username}} </h1>
-<h1>This is the profile page for {{user.username}}</h1>
 <h2> Valorant Name  {{user.profile.valorantName}}</h2>
 <h3> Valorant Tagline  {{user.profile.valorantTagline}}</h3>
 <h4> Valorant Region {{user.profile.valorantRegion}}</h4>
@@ -43,11 +10,13 @@
 <h6> Valorant Rangue  {{user.profile.valorantRangue}}</h6>
 <h7> Valorant CurrentRR  {{user.profile.valorantCurrentRR}}</h7>
 <br><br>
-<h8> Our calculate elo marca de la casa{{user.profile.valorantCalculatedElo}}</h8>
+<h8> ELO{{user.profile.valorantCalculatedElo}}</h8>
+<div>
+    <a href="{% url 'editprofile' request.user.profile.id %}" class="btn-default nav-link waves-effect" >
+        <!--@{{user.id}}-->
+         <span class="clearfix d-none d-sm-inline-block"> Edit my profile </span>
+     </a>
+</div>
 
-<a href="{% url 'editprofile' request.user.profile.id %}" class="btn-default nav-link waves-effect" >
-    @{{user.id}}
-    <span class="clearfix d-none d-sm-inline-block"> Edit my profile </span>
-</a>
 {% endif %}
 {% endblock content%}

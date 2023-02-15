@@ -1,11 +1,9 @@
 {% extends 'users/base.html' %}
 {% block content %}
-{% block title %}Edit Profile Page{% endblock %}
 
 {% if user.is_authenticated %}
 
 <h1>Edit Profile Page</h1>
-<h2>ewffewfwefe</h2>
 <h1>This is the profile page for {{user.username}}</h1>
 <h2> Valorant Name  {{user.profile.valorantName}}</h2>
 <h3> Valorant Tagline  {{user.profile.valorantTagline}}</h3>
@@ -13,6 +11,8 @@
 <h5> Valorant League  {{user.profile.valorantLeague}}</h5>
 <h6> Valorant Rangue  {{user.profile.valorantRangue}}</h6>
 <h7> Valorant CurrentRR  {{user.profile.valorantCurrentRR}}</h7>
+<h8> ELO:  {{user.profile.valorantCalculatedElo}}</h8>
+
 <br><br>
 <div class="form-group">
     <form method="POST" enctype="multipart/form-data">
@@ -20,7 +20,6 @@
         {{ form.as_p }}
      <button class="btn btn-secondary">Update Profile Page</button>
 </div>
-<h8> Our calculate elo marca de la casa{{user.profile.valorantCalculatedElo}}</h8>
 
 {% endif %}
 
