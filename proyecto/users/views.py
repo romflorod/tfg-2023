@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm
 from users.models import Profile
 from django.views.generic.edit import UpdateView
+from django.views.generic import ListView
 import requests
 
 class EditProfileView(UpdateView):
@@ -11,6 +12,11 @@ class EditProfileView(UpdateView):
     model = Profile    
     template_name = 'editprofile.html'    
     fields = ['birth_date','valorantName','valorantRegion','valorantTagline']
+
+    
+class TermsView(ListView):
+    model = Profile
+    template_name = "terms.html"
 
 def home(request):
     print("entro home")
@@ -28,6 +34,8 @@ def home(request):
 def profile(request):
     print("entro profile")
     return render(request, 'users/profile.html')
+
+
 
 def getStatsCustom(auxList):
     print(auxList)
