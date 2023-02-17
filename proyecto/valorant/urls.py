@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from users import views as user_views
 from django.contrib.auth import views as auth_views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +27,6 @@ urlpatterns = [
     path('profile/', auth_views.LoginView.as_view(template_name="users/profile.html"), name='profile'),
     path('logout/', auth_views.LogoutView.as_view(template_name="users/logout.html"), name='logout'),
     path('terms/', user_views.TermsView.as_view(template_name="users/terms.html"), name='terms'),
-    path('profile/editprofile/<int:pk>', user_views.EditProfileView.as_view(template_name="users/editprofile.html"), name='editprofile'),]
+    path('profile/editprofile/<int:pk>', user_views.editprofile, name='editprofile'),]
+
+urlpatterns+= staticfiles_urlpatterns()

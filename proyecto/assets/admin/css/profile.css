@@ -2,11 +2,16 @@ body{
     margin-top: 20px;
     background-color: lightgray;
 }
+
+.h1{
+    color:blue;
+}
 .container {
     height: 200px;
     position: relative;
     border: 3px solid green;
-  }
+    background-color: red;
+}
   .vertical-center {
     margin: 0;
     position: absolute;
@@ -42,5 +47,5 @@ body{
 }
 
 .content{
-    background-color: whitesmoke;
+    background-color: green;
 }

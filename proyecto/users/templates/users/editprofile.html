@@ -2,24 +2,66 @@
 {% block content %}
 
 {% if user.is_authenticated %}
+<html>
+<head>
+</head>
+<body>
+  <div class="container">
+    <div clas="main">
+      <div class="row">
+        <div class="col-md4 mt-1">
+          <div class="card text-center sidebar">
+            <div class="card-body">
+              <div class="mt-3">
+                <h3>{{user.username}}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div  class="col-md8 mt-1">
+          <div class="card mb-3 content">
+            <h1 class="m-3 pt-3">Valorant Name: {{user.profile.valorantName}}</h1>
+            <div class="w3-sidebar w3-bar-block" style="width:100%">
+              <div class="card-body">
+                <hr>
+                <form method="post">
+                  {% csrf_token %}
+                  {% for field in form %}
+                  <div class="row">
+                    <div class="col-md-3">
+                      <h5>{{ field.label_tag }}</h5>
+                    </div>
+                    <div class="col-md-9 text-secondary">
+                      {{field}}
+                    </div>
+                  </div>
+                  <p>
+                      {% if field.help_text %}
+                      <small style="color: grey">{{ field.help_text }}</small>
+                      {% endif %}
+                      {% for error in field.errors %}
+                      <p style="color: red">{{ error }}</p>
+                      {% endfor %}
+                  </p>
+                  {% endfor %}
+                  <div class = "form-group">
+                  <button type="submit">Update profile</button>
+                </form>
+              </div>
+            </div>
+            <div class="card mb-3 content">
+              <h1 class="m-3">ELO: {{user.profile.valorantCalculatedElo}}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
 
-<h1>Edit Profile Page</h1>
-<h1>This is the profile page for {{user.username}}</h1>
-<h2> Valorant Name  {{user.profile.valorantName}}</h2>
-<h3> Valorant Tagline  {{user.profile.valorantTagline}}</h3>
-<h4> Valorant Region {{user.profile.valorantRegion}}</h4>
-<h5> Valorant League  {{user.profile.valorantLeague}}</h5>
-<h6> Valorant Rangue  {{user.profile.valorantRangue}}</h6>
-<h7> Valorant CurrentRR  {{user.profile.valorantCurrentRR}}</h7>
-<h8> ELO:  {{user.profile.valorantCalculatedElo}}</h8>
 
 <br><br>
-<div class="form-group">
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-     <button class="btn btn-secondary">Update Profile Page</button>
-</div>
 
 {% endif %}
 

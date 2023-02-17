@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm
+from .forms import EditProfileForm
 from users.models import Profile
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
@@ -9,11 +11,11 @@ import requests
 
 class EditProfileView(UpdateView):
     print("entro profile edit")
-    model = Profile    
-    template_name = 'editprofile.html'    
+    model = Profile
+    template_name = 'editprofile.html'
     fields = ['birth_date','valorantName','valorantRegion','valorantTagline']
+    Form = EditProfileForm
 
-    
 class TermsView(ListView):
     model = Profile
     template_name = "terms.html"
@@ -74,10 +76,39 @@ def getStatsCustom(auxList):
         if(league=="Radiant"):
             calculatedElo=calculatedElo+800
         print(currentRR)
-        calculatedElo=calculatedElo+int(range)+int(currentRR.replace("RR.",""))       
+        calculatedElo=calculatedElo+int(range)+int(currentRR.replace("RR.",""))
         statlist=[league,range,currentRR,calculatedElo]
     return statlist
  
+
+def editprofile(request, pk):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST)
+        if form.is_valid():
+            profile = Profile.objects.get(id=pk)
+            user = profile.user
+            user.refresh_from_db()
+            user.profile.birth_date = form.cleaned_data.get('birth_date')
+            user.profile.valorantName = form.cleaned_data.get('valorantName')
+            user.profile.valorantTagline = form.cleaned_data.get('valorantTagline')
+            user.profile.valorantRegion = form.cleaned_data.get('valorantRegion')
+            auxList=[form.cleaned_data.get('valorantRegion'),form.cleaned_data.get('valorantName'),form.cleaned_data.get('valorantTagline')]
+            stats=getStatsCustom(auxList)
+            user.profile.valorantLeague=stats[0]
+            user.profile.valorantRangue=stats[1]
+            user.profile.valorantCurrentRR=stats[2]
+            user.profile.valorantCalculatedElo=stats[3]
+            user.profile.save()
+            #username = form.cleaned_data.get('username')
+            #raw_password = form.cleaned_data.get('password1')
+            #user = authenticate(username=username, password=raw_password)
+            user.save()
+            return redirect('/profile/')
+    else:
+        form = EditProfileForm()
+    context = { 'form': form }
+    return render(request, 'users/editprofile.html', context)
+
 def signup(request):    
     if request.method == 'POST':
         form = SignupForm(request.POST)
