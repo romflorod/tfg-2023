@@ -8,6 +8,7 @@ from users.models import Profile
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
 import requests
+import json
 
 class EditProfileView(UpdateView):
     print("entro profile edit")
@@ -43,6 +44,11 @@ def getStatsCustom(auxList):
     print(auxList)
     print("entro stats")
     url= "https://api.kyroskoh.xyz/valorant/v1/mmr/"+auxList[0]+"/"+auxList[1]+"/"+auxList[2]+""
+    url2="https://api.henrikdev.xyz/valorant/v3/matches/"+auxList[0]+"/"+auxList[1]+"/"+auxList[2]+""
+    print(url2)
+    print("Json")
+    requestHENRIK=(requests.get(url2).json)
+    print(requestHENRIK)
     if(requests.get(url).status_code==400):
         print("entro error")
         statlist=["error",0,0,0]
@@ -76,10 +82,13 @@ def getStatsCustom(auxList):
         if(league=="Radiant"):
             calculatedElo=calculatedElo+800
         print(currentRR)
-        CurrentRRAux=0
         if("null" in currentRR):
             currentRR="0RR"
-        calculatedElo=calculatedElo+int(range)+int(currentRR.replace("RR",""))
+        if("RR." in currentRR):
+            currentRR=currentRR.replace("RR.","")
+        if("RR." in currentRR):
+            currentRR=currentRR.replace("RR","")     
+        calculatedElo=calculatedElo+int(range)+int(currentRR)
         statlist=[league,range,currentRR,calculatedElo]
     return statlist
  
