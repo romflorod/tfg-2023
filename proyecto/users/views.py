@@ -31,6 +31,11 @@ def home(request):
         userAux.profile.valorantRangue=stats[1]
         userAux.profile.valorantCurrentRR=stats[2]
         userAux.profile.valorantCalculatedElo=stats[3]
+        userAux.profile.valorantKills=stats[4]
+        userAux.profile.valorantDeaths=stats[5]
+        userAux.profile.valorantAssists=stats[6]
+        userAux.profile.valorantBodyshots=stats[7]
+        userAux.profile.valorantHeadshots=stats[8]        
         userAux.profile.save()    
     return render(request, 'users/home.html')
     
@@ -41,28 +46,26 @@ def profile(request):
 
 
 def getStatsCustom(auxList):
-    print(auxList)
-    print("entro stats")
     url= "https://api.kyroskoh.xyz/valorant/v1/mmr/"+auxList[0]+"/"+auxList[1]+"/"+auxList[2]+""
     url2="https://api.henrikdev.xyz/valorant/v3/matches/"+auxList[0]+"/"+auxList[1]+"/"+auxList[2]+""
-    print(url2)
-    print("Json")
-    requestHENRIK=(requests.get(url2).json())
-    jsonRequest= json.dumps(requestHENRIK)
-    #jsonStats2=requestHENRIK.json
-    #jsonStats2Aux=json.loads(jsonStats2)
-    print(jsonRequest)
-    #print(jsonStats2Aux)
-
-    if(requests.get(url).status_code==400):
-        print("entro error")
-        statlist=["error",0,0,0]
+    requestHENRIK=(requests.get(url2))
+    if(requestHENRIK.status_code==200):
+        jsonRequest= json.dumps(requestHENRIK.json())
+        requestJsonBruta=jsonRequest.split("kills")
+        requestJsonBrutaLimIzqAux=requestJsonBruta[1]
+        requestJsonBrutaLimIzq=requestJsonBrutaLimIzqAux.split("legshots")
+        requestJsonFina=requestJsonBrutaLimIzq[0].replace('"','').replace(":","")
+        requestJsonFinaSplit=requestJsonFina.split(",")
+        valorantKills=int(requestJsonFinaSplit[0].strip())
+        valorantDeaths=int(requestJsonFinaSplit[1].replace("deaths","").strip())
+        valorantAssists=int(requestJsonFinaSplit[2].replace("assists","").strip())
+        valorantBodyshots=int(requestJsonFinaSplit[3].replace("bodyshots","").strip())
+        valorantHeadshots=int(requestJsonFinaSplit[4].replace("headshots","").strip())
     else:
-        print("entro bien")
+        statlist=["error",0,0,0,0,0,0,0,0]
+    if(requests.get(url).status_code==200):
         stat= requests.get(url).text
-        print(url)
-        print(stat)
-        stat.strip
+        stat.strip()
         stataux=stat.split("-")
         leagueAndRangue=stataux[0]
         currentRR=stataux[1]#RR ACTUALES
@@ -86,7 +89,6 @@ def getStatsCustom(auxList):
             calculatedElo=calculatedElo+700
         if(league=="Radiant"):
             calculatedElo=calculatedElo+800
-        print(currentRR)
         if("null" in currentRR):
             currentRR="0RR"
         if("RR." in currentRR):
@@ -94,7 +96,10 @@ def getStatsCustom(auxList):
         if("RR" in currentRR):
             currentRR=currentRR.replace("RR","")     
         calculatedElo=calculatedElo+int(range)+int(currentRR)
-        statlist=[league,range,currentRR,calculatedElo]
+        statlist=[league,range,currentRR,calculatedElo,valorantKills,valorantDeaths,valorantAssists,valorantBodyshots,valorantHeadshots]
+    else:
+        statlist=["error",0,0,0,0,0,0,0,0]
+
     return statlist
  
 
@@ -115,6 +120,12 @@ def editprofile(request, pk):
             user.profile.valorantRangue=stats[1]
             user.profile.valorantCurrentRR=stats[2]
             user.profile.valorantCalculatedElo=stats[3]
+            user.profile.valorantKills=stats[4]
+            user.profile.valorantDeaths=stats[5]
+            user.profile.valorantAssists=stats[6]
+            user.profile.valorantBodyshots=stats[7]
+            user.profile.valorantHeadshots=stats[8]
+
             user.profile.save()
             #username = form.cleaned_data.get('username')
             #raw_password = form.cleaned_data.get('password1')
@@ -142,6 +153,11 @@ def signup(request):
             user.profile.valorantRangue=stats[1]
             user.profile.valorantCurrentRR=stats[2]
             user.profile.valorantCalculatedElo=stats[3]
+            user.profile.valorantKills=stats[4]
+            user.profile.valorantDeaths=stats[5]
+            user.profile.valorantAssists=stats[6]
+            user.profile.valorantBodyshots=stats[7]
+            user.profile.valorantHeadshots=stats[8]
             user.profile.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')

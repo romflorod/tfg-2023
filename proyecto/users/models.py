@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ValidationError
+
 REGIONCHOICES=[
         ('NA','NA'),
         ('EU','EU'),
@@ -21,6 +23,11 @@ class Profile(models.Model):
     valorantRangue = models.TextField(max_length=40, blank=True)
     valorantCurrentRR = models.TextField(max_length=40, blank=True)
     valorantCalculatedElo = models.TextField(max_length=40, blank=True)
+    valorantKills = models.TextField(max_length=40, blank=True)
+    valorantDeaths = models.TextField(max_length=40, blank=True)
+    valorantAssists = models.TextField(max_length=40, blank=True)
+    valorantBodyshots = models.TextField(max_length=40, blank=True)
+    valorantHeadshots = models.TextField(max_length=40, blank=True)
 
     @receiver(post_save, sender=User)
     def update_user_profile(sender, instance, created, **kwargs):
