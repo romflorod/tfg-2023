@@ -47,8 +47,13 @@ def getStatsCustom(auxList):
     url2="https://api.henrikdev.xyz/valorant/v3/matches/"+auxList[0]+"/"+auxList[1]+"/"+auxList[2]+""
     print(url2)
     print("Json")
-    requestHENRIK=(requests.get(url2).json)
-    print(requestHENRIK)
+    requestHENRIK=(requests.get(url2).json())
+    jsonRequest= json.dumps(requestHENRIK)
+    #jsonStats2=requestHENRIK.json
+    #jsonStats2Aux=json.loads(jsonStats2)
+    print(jsonRequest)
+    #print(jsonStats2Aux)
+
     if(requests.get(url).status_code==400):
         print("entro error")
         statlist=["error",0,0,0]
@@ -86,7 +91,7 @@ def getStatsCustom(auxList):
             currentRR="0RR"
         if("RR." in currentRR):
             currentRR=currentRR.replace("RR.","")
-        if("RR." in currentRR):
+        if("RR" in currentRR):
             currentRR=currentRR.replace("RR","")     
         calculatedElo=calculatedElo+int(range)+int(currentRR)
         statlist=[league,range,currentRR,calculatedElo]
