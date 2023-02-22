@@ -129,14 +129,9 @@ def editprofile(request, pk):
             user.profile.valorantHeadshots=stats[8]
 
             user.profile.save()
-            if user.profile.valorantLeague == "error":
-                form = EditProfileForm()
-                context = { 'form': form }
-                return reverse
             #username = form.cleaned_data.get('username')
             #raw_password = form.cleaned_data.get('password1')
             #user = authenticate(username=username, password=raw_password)
-            
             user.save()
             return redirect('/profile/')
     else:
@@ -170,7 +165,6 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             user.save()
-            
 
             login(request, user)
             return redirect('home')
