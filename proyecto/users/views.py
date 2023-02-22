@@ -11,7 +11,6 @@ import requests
 import json
 
 class EditProfileView(UpdateView):
-    print("entro profile edit")
     model = Profile
     template_name = 'editprofile.html'
     fields = ['birth_date','valorantName','valorantRegion','valorantTagline']
@@ -22,11 +21,11 @@ class TermsView(ListView):
     template_name = "terms.html"
 
 def home(request):
-    print("entro home")
     userAux=request.user
     if(userAux.is_authenticated):
         auxList=[userAux.profile.valorantRegion,userAux.profile.valorantName,userAux.profile.valorantTagline]
         stats=getStatsCustom(auxList)
+        userAux.refresh_from_db()
         userAux.profile.valorantLeague=stats[0]
         userAux.profile.valorantRangue=stats[1]
         userAux.profile.valorantCurrentRR=stats[2]
@@ -37,10 +36,13 @@ def home(request):
         userAux.profile.valorantBodyshots=stats[7]
         userAux.profile.valorantHeadshots=stats[8]        
         userAux.profile.save()    
+        if userAux.profile.valorantLeague == "error":
+            form = EditProfileForm()
+            context = { 'form': form }
+            return redirect("profile/editprofile/"+str(userAux.profile.id))                           
     return render(request, 'users/home.html')
     
 def profile(request):
-    print("entro profile")
     return render(request, 'users/profile.html')
 
 
