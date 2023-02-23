@@ -31,3 +31,4 @@ jobs:
     - name: Run Tests
       run: |
         python proyecto/manage.py test
+        python proyecto/manage.py test valorant
