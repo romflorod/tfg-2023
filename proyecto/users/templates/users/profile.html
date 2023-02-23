@@ -3,8 +3,13 @@
 
 {% if user.is_authenticated %}
 <html>
-<head>
-</head>
+  <head>
+    <script>
+      {% if user.profile.valorantLeague == "error" %}
+        alert("Valorant account not found go to edit your profile");
+      {% endif %}
+    </script>
+  </head> 
 <body>
   <div class="container" style="">
     <div clas="main">
