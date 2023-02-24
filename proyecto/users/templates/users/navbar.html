@@ -68,9 +68,11 @@
       <!-- Right -->
       <ul class="navbar-nav nav-flex-icons">
         <li class="nav-item">
-            <a href="{% url 'profile' %} " class="btn-default nav-link waves-effect" >
+          {% if user.is_authenticated %}
+            <a href="{% url 'profile' request.user.profile.id %} " class="btn-default nav-link waves-effect" >
               <span class="clearfix d-none d-sm-inline-block"> My profile </span>
             </a>
+          {% endif %}
         </li>
 
         <li class="nav-item">

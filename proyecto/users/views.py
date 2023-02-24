@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm
 from .forms import EditProfileForm
-from users.models import Profile
+from users.models import Profile,FriendList
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
 import requests
@@ -42,8 +42,30 @@ def home(request):
             return redirect("profile/editprofile/"+str(userAux.profile.id))                           
     return render(request, 'users/home.html')
     
-def profile(request):
-    return render(request, 'users/profile.html')
+def profile(request,pk):
+    userGet=request.user
+    context={}
+    try:
+        friend_list= FriendList.objects.get(user=userGet)
+    except FriendList.DoesNotExist:
+        friend_list= FriendList(user=userGet)
+        friend_list.save()
+    friends = friend_list.friends.all()
+    context['friends']=friends
+    if (userGet.is_authenticated):
+        return render(request, 'users/profile.html', context)
+    else:
+        return render(request, 'users/home.html')
+
+    
+    #is_self= True
+    #is_friend=False
+    #if(userGet.is_authenticated and userGet != account)
+    #    is_self = False
+    #elif not userGet.is_authenticated:
+    #    is_self = False
+    #context['is_self']=is_self
+    
 
 
 
