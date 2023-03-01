@@ -22,6 +22,7 @@ def friends_list(request):
 def add_friend(request, friend_id):
     friend = User.objects.get(id=friend_id)
     request.user.profile.friends.add(friend)
+    request.user.save()
     return redirect('profile', pk=request.user.profile.pk)
 class EditProfileView(UpdateView):
     model = Profile
