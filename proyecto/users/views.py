@@ -36,9 +36,7 @@ class TermsView(ListView):
 
 def home(request):
     userAux=request.user
-    print(userAux.profile.friends)
-    print(userAux.profile.valorantKills)
-
+ 
     if(userAux.is_authenticated):
         auxList=[userAux.profile.valorantRegion,userAux.profile.valorantName,userAux.profile.valorantTagline]
         stats=getStatsCustom(auxList)
