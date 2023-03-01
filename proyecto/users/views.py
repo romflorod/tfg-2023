@@ -7,9 +7,22 @@ from .forms import EditProfileForm
 from users.models import Profile
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
+from django.contrib.auth.decorators import login_required
+
 import requests
 import json
-
+def friends_list(request):
+    user = request.user
+    friends = user.profile.friends.all()
+    print(f"User: {user}")
+    print(f"Friends: {friends}")
+    context = {'friends': friends}
+    return render(request, 'users/friends_list.html', context)
+@login_required
+def add_friend(request, friend_id):
+    friend = User.objects.get(id=friend_id)
+    request.user.profile.friends.add(friend)
+    return redirect('profile', pk=request.user.profile.pk)
 class EditProfileView(UpdateView):
     model = Profile
     template_name = 'editprofile.html'
@@ -22,6 +35,9 @@ class TermsView(ListView):
 
 def home(request):
     userAux=request.user
+    print(userAux.profile.friends)
+    print(userAux.profile.valorantKills)
+
     if(userAux.is_authenticated):
         auxList=[userAux.profile.valorantRegion,userAux.profile.valorantName,userAux.profile.valorantTagline]
         stats=getStatsCustom(auxList)

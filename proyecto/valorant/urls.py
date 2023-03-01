@@ -26,7 +26,10 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name="users/login.html"), name='login'),
     path('profile/<int:pk>',  user_views.profile, name='profile'),
     path('logout/', auth_views.LogoutView.as_view(template_name="users/logout.html"), name='logout'),
-    path('terms/', user_views.TermsView.as_view(template_name="users/terms.html"), name='terms'),
+    path('terms/', user_views.TermsView.as_view(template_name="users/terms.html"), name='terms'), 
+    path('addfriend/<int:friend_id>/', user_views.add_friend, name='add_friend'),
+    path('friends_list/', user_views.friends_list, name='friends_list'),
+
     path('profile/editprofile/<int:pk>', user_views.editprofile, name='editprofile'),]
 
 urlpatterns+= staticfiles_urlpatterns()

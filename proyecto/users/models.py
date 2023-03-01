@@ -30,7 +30,7 @@ class Profile(models.Model):
     valorantAssists = models.TextField(max_length=40, blank=True)
     valorantBodyshots = models.TextField(max_length=40, blank=True)
     valorantHeadshots = models.TextField(max_length=40, blank=True)
-    
+    friends = models.ManyToManyField(User, related_name='friends')
     @receiver(post_save, sender=User)
     def update_user_profile(sender, instance, created, **kwargs):
         if created:
