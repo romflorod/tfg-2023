@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm
 from .forms import EditProfileForm
-from users.models import Profile,FriendList
+from users.models import Profile
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
 import requests
@@ -45,27 +45,12 @@ def home(request):
 def profile(request,pk):
     userGet=request.user
     context={}
-    try:
-        friend_list= FriendList.objects.get(user=userGet)
-    except FriendList.DoesNotExist:
-        friend_list= FriendList(user=userGet)
-        friend_list.save()
-    friends = friend_list.friends.all()
-    context['friends']=friends
     if (userGet.is_authenticated):
         return render(request, 'users/profile.html', context)
     else:
         return render(request, 'users/home.html')
 
-    
-    #is_self= True
-    #is_friend=False
-    #if(userGet.is_authenticated and userGet != account)
-    #    is_self = False
-    #elif not userGet.is_authenticated:
-    #    is_self = False
-    #context['is_self']=is_self
-    
+   
 
 
 
@@ -73,7 +58,7 @@ def getStatsCustom(auxList):
     url= "https://api.kyroskoh.xyz/valorant/v1/mmr/"+auxList[0]+"/"+auxList[1]+"/"+auxList[2]+""
     url2="https://api.henrikdev.xyz/valorant/v3/matches/"+auxList[0]+"/"+auxList[1]+"/"+auxList[2]+""
     requestHENRIK=(requests.get(url2))
-    if(requestHENRIK.status_code==200):
+    if(requestHENRIK.status_code==200 and requests.get(url).status_code==200):
         jsonRequest= json.dumps(requestHENRIK.json())
         requestJsonBruta=jsonRequest.split("kills")
         requestJsonBrutaLimIzqAux=requestJsonBruta[1]
@@ -85,9 +70,6 @@ def getStatsCustom(auxList):
         valorantAssists=int(requestJsonFinaSplit[2].replace("assists","").strip())
         valorantBodyshots=int(requestJsonFinaSplit[3].replace("bodyshots","").strip())
         valorantHeadshots=int(requestJsonFinaSplit[4].replace("headshots","").strip())
-    else:
-        statlist=["error",0,0,0,0,0,0,0,0]
-    if(requests.get(url).status_code==200):
         stat= requests.get(url).text
         stat.strip()
         stataux=stat.split("-")
@@ -123,6 +105,7 @@ def getStatsCustom(auxList):
         statlist=[league,range,currentRR,calculatedElo,valorantKills,valorantDeaths,valorantAssists,valorantBodyshots,valorantHeadshots]
     else:
         statlist=["error",0,0,0,0,0,0,0,0]
+   
 
     return statlist
  
@@ -155,7 +138,8 @@ def editprofile(request, pk):
             #raw_password = form.cleaned_data.get('password1')
             #user = authenticate(username=username, password=raw_password)
             user.save()
-            return redirect('/profile/')
+        
+            return redirect('/profile/'+str(pk) )
     else:
         form = EditProfileForm()
     context = { 'form': form }
