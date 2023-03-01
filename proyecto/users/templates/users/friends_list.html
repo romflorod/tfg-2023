@@ -4,7 +4,13 @@
   <h1>Friend List</h1>
   <ul>
   {% for friend in friends %}  
-    <li>{{ friend.username }}</li>
+    <li>{{ friend.profile.valorantName }}
+        <ul>
+            <li>Tagline: {{ friend.profile.valorantTagline }}</li>
+            <li>Last Game Kills: {{ friend.profile.valorantKills }}</li>
+            <li>Last Game Deaths: {{ friend.profile.valorantDeaths }}</li>
+        </ul>
+    </li>
   {% empty %}
     <li>You have no friends.</li>
   {% endfor %}
