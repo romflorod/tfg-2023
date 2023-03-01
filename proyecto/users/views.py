@@ -23,6 +23,11 @@ def add_friend(request, friend_id):
     friend = User.objects.get(id=friend_id)
     request.user.profile.friends.add(friend)
     request.user.save()
+    print(friend.profile.id)
+    friend.profile.friends.add(User.objects.get(id=friend.profile.id))
+    #friend to me, a partir de friend
+    # saco el usuario con un get id del user
+    #
     return redirect('profile', pk=request.user.profile.pk)
 class EditProfileView(UpdateView):
     model = Profile
