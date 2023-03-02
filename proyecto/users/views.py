@@ -4,22 +4,49 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm
 from .forms import EditProfileForm
-from users.models import Profile
+from users.models import Profile,FriendRequest
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseForbidden
 
 import requests
 import json
+def accept_friend_request(request, friend_request_id):
+    friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
+    if request.user != friend_request.receiver:
+        return HttpResponseForbidden()
+    friend_request.accept()
+    friend_request.receiver.profile.friends.add(friend_request.sender)
+    friend_request.sender.profile.friends.add(friend_request.receiver)
+    request.user.save()
+    FriendRequest.delete(friend_request)
+    return redirect('profile', pk=request.user.profile.pk)
+
+@login_required
+def reject_friend_request(request, friend_request_id):
+    friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
+    if request.user != friend_request.receiver:
+        return HttpResponseForbidden()
+    friend_request.reject()
+    FriendRequest.delete(friend_request)
+
+    return redirect('profile', pk=request.user.profile.pk)
 def friends_list(request):
     user = request.user
     friends = user.profile.friends.all()
-    print(f"User: {user}")
-    print(f"Friends: {friends}")
+  
     context = {'friends': friends}
     return render(request, 'users/friends_list.html', context)
 @login_required
 def add_friend(request, friend_id):
+    friend = get_object_or_404(User, id=friend_id)
+    friend_request, created = FriendRequest.objects.get_or_create(sender=request.user, receiver=friend)
+    if not created:
+        return redirect('profile', pk=request.user.profile.pk) # La solicitud ya existe
+    return redirect('profile', pk=friend.profile.pk)
+"""
     friend = User.objects.get(id=friend_id)
     request.user.profile.friends.add(friend)
     request.user.save()
@@ -30,6 +57,7 @@ def add_friend(request, friend_id):
     # saco el usuario con un get id del user
     #
     return redirect('profile', pk=request.user.profile.pk)
+"""
 class EditProfileView(UpdateView):
     model = Profile
     template_name = 'editprofile.html'

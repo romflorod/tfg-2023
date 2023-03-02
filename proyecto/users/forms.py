@@ -37,7 +37,7 @@ class SignupForm(UserCreationForm):
     birth_date = forms.DateTimeField(widget=DateInput, help_text='Required. Format: YYYY-MM-DD')
     valorantName = forms.CharField(max_length=20, required=True, help_text='Required. Enter your valorantname.')
     valorantRegion = forms.CharField(required=True, widget=forms.Select(choices=REGIONCHOICES))
-    valorantTagline = forms.CharField(max_length=3, required=True, help_text='Required. Enter your tagline. Format: AAA')
+    valorantTagline = forms.CharField(max_length=7, required=True, help_text='Required. Enter your tagline. Format: AAA')
 
     class Meta:
         model = User

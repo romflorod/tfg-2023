@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 REGIONCHOICES=[
         ('NA','NA'),
@@ -11,7 +12,18 @@ REGIONCHOICES=[
         ('AP','AP'),
         ('KR','KR'),
 ]
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(User, related_name='friend_requests_sent', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='friend_requests_received', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    accepted_at = models.DateTimeField(null=True, blank=True)
 
+    def accept(self):
+        self.accepted_at = timezone.now()
+        self.save()
+
+    def reject(self):
+        self.delete()
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
