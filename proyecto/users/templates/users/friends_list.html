@@ -1,8 +1,6 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-
-
 <body>
   <div class="container" style="">
     <div clas="main">
@@ -60,5 +58,38 @@
   <p>No pending requests.</p>
 {% endfor %}
 </body>
-</html>
 {% endblock %}
+
+{% block scripts %}
+<!-- script para recargar la página después de aceptar una solicitud -->
+<script>
+  // detectar cuando se envía el formulario de aceptar solicitud
+  document.querySelectorAll('.friend-request').forEach(form => {
+    form.addEventListener('submit', event => {
+      // prevenir la acción predeterminada del formulario
+      event.preventDefault();
+
+      // enviar la solicitud de forma asíncrona
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+          'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          // recargar la página después de 1 segundo
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    });
+  });
+</script>
+{% endblock %}
+</html>
