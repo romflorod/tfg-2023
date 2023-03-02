@@ -34,7 +34,6 @@ def accept_friend_request(request, friend_request_id):
     request.user.save()
     FriendRequest.delete(friend_request)
     return render(request, 'users/friends_list.html')
-
 @login_required
 def reject_friend_request(request, friend_request_id):
     friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
