@@ -120,21 +120,7 @@
       </div>
     </div>
   </div>
-  {% for friend_request in user.friend_requests_received.all %}
-  <div class="friend-request">
-    <p>{{ friend_request.sender }} quiere agregarte como amigo.</p>
-    <form method="POST" action="{% url 'accept_friend_request' friend_request.id %}">
-      {% csrf_token %}
-      <button type="submit">Aceptar</button>
-    </form>
-    <form method="POST" action="{% url 'reject_friend_request' friend_request.id %}">
-      {% csrf_token %}
-      <button type="submit">Rechazar</button>
-    </form>
-  </div>
-{% empty %}
-  <p>No tienes solicitudes de amistad pendientes.</p>
-{% endfor %}
+ 
 
 </body>
 </html>

@@ -13,6 +13,14 @@ from django.http import HttpResponseForbidden
 
 import requests
 import json
+
+
+@login_required
+def users_list(request):
+    users = User.objects.all().order_by('profile__valorantCalculatedElo')
+    print(users)
+    context = {'users': users}
+    return render(request, 'users/users_list.html', context)
 def accept_friend_request(request, friend_request_id):
     friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
     if request.user != friend_request.receiver:

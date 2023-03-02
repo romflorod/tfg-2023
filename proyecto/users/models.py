@@ -12,6 +12,7 @@ REGIONCHOICES=[
         ('AP','AP'),
         ('KR','KR'),
 ]
+
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='friend_requests_sent', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='friend_requests_received', on_delete=models.CASCADE)

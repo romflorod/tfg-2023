@@ -44,6 +44,21 @@
       </div>
     </div>
   </div>
+  {% for friend_request in user.friend_requests_received.all %}
+  <div class="friend-request">
+    <p>{{ friend_request.sender }} wants to add you as a friend.</p>
+    <form method="POST" action="{% url 'accept_friend_request' friend_request.id %}">
+      {% csrf_token %}
+      <button type="submit">Acept</button>
+    </form>
+    <form method="POST" action="{% url 'reject_friend_request' friend_request.id %}">
+      {% csrf_token %}
+      <button type="submit">Reject</button>
+    </form>
+  </div>
+{% empty %}
+  <p>No pending requests.</p>
+{% endfor %}
 </body>
 </html>
 {% endblock %}

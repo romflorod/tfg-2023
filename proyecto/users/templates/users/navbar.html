@@ -80,6 +80,10 @@
             <span class="clearfix d-none d-sm-inline-block"> Terms of Service </span>
           </a>
       </li>
+      <li class="nav-item">
+        <a href="{% url 'friends_list' %} " class="btn-default nav-link waves-effect" >
+          <span class="clearfix d-none d-sm-inline-block"> Friends List </span>
+        </a>
 
 
         {% if request.user.is_authenticated %}
