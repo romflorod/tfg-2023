@@ -27,7 +27,7 @@ urlpatterns = [
     path('profile/<int:pk>',  user_views.profile, name='profile'),
     path('logout/', auth_views.LogoutView.as_view(template_name="users/logout.html"), name='logout'),
     path('terms/', user_views.TermsView.as_view(template_name="users/terms.html"), name='terms'),
-    path('addfriend/<int:friend_id>/', user_views.add_friend, name='add_friend'),
+    path('add_friend/<int:friend_id>', user_views.add_friend, name='add_friend'),
     path('friends_list/', user_views.friends_list, name='friends_list'),
     path('accept_friend_request/<int:friend_request_id>/', user_views.accept_friend_request, name='accept_friend_request'),
     path('reject-friend-request/<int:request_id>/', user_views.reject_friend_request, name='reject_friend_request'),

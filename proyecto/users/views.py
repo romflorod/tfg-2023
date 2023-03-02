@@ -44,9 +44,9 @@ def reject_friend_request(request, friend_request_id):
 def friends_list(request):
     user = request.user
     friends = user.profile.friends.all()
-  
     context = {'friends': friends}
     return render(request, 'users/friends_list.html', context)
+@login_required
 @login_required
 def add_friend(request, friend_id):
     friend = get_object_or_404(User, id=friend_id)
