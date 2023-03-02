@@ -23,8 +23,9 @@ def add_friend(request, friend_id):
     friend = User.objects.get(id=friend_id)
     request.user.profile.friends.add(friend)
     request.user.save()
-    print(friend.profile.id)
-    friend.profile.friends.add(User.objects.get(id=friend.profile.id))
+    friend_id=friend.profile.id + 1
+    print(friend_id)
+    friend.profile.friends.add(User.objects.get(id=request.user.profile.id))
     #friend to me, a partir de friend
     # saco el usuario con un get id del user
     #
