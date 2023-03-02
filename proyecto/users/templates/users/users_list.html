@@ -4,16 +4,24 @@
   <h1>User List</h1>
   <ul>
     {% for user in users %}
-      <li>Valorant Name: {{ user.profile.valorantName }}
-        <ul>
-          <li>Tagline: {{ user.profile.valorantTagline }}</li>
-          <li>Web Username: {{ user.username }}</li>
-          <li>Last Game Kills: {{ user.profile.valorantKills }}</li>
-          <li>Last Game Deaths: {{ user.profile.valorantDeaths }}</li>
-          <li>Calculated elo: {{ user.profile.valorantCalculatedElo }}</li>
-
-        </ul>
-      </li>
-    {% endfor %}
+    <li>Valorant Name: {{ user.profile.valorantName }}
+      <ul>
+        <li>Tagline: {{ user.profile.valorantTagline }}</li>
+        <li>Web Username: {{ user.username }}</li>
+        <li>Last Game Kills: {{ user.profile.valorantKills }}</li>
+        <li>Last Game Deaths: {{ user.profile.valorantDeaths }}</li>
+        <li>Calculated elo: {{ user.profile.valorantCalculatedElo }}</li>
+        {% if user not in friends %}
+          <li>
+            <form action="{% url 'add_friend' friend_id=user.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit">Send frend request</button>
+            </form>
+          </li>
+        {% endif %}
+      </ul>
+    </li>
+  {% endfor %}
+  
   </ul>
 {% endblock %}

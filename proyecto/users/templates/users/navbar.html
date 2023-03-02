@@ -84,7 +84,12 @@
         <a href="{% url 'friends_list' %} " class="btn-default nav-link waves-effect" >
           <span class="clearfix d-none d-sm-inline-block"> Friends List </span>
         </a>
-
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'users_list' %} " class="btn-default nav-link waves-effect" >
+          <span class="clearfix d-none d-sm-inline-block"> Users List </span>
+        </a>
+      </li>
 
         {% if request.user.is_authenticated %}
         <li class="nav-item">
