@@ -26,10 +26,8 @@ def players_looking_for_group_on_your_elo(request):
         eloBucleAux = int(usuario.profile.valorantCalculatedElo)
         booleanoAux = (abs(eloBucleAux - intElo) < 100)
         booleanoAux2 = bool(usuario.profile.looking_for_group)
-        print(booleanoAux2)
         if booleanoAux and booleanoAux2:
             filtered_users.append(usuario)
-    print(filtered_users)
     context = {'users': filtered_users}
     return render(request, 'users/players_looking_for_group_on_your_elo.html', context)
 def users_list(request):
