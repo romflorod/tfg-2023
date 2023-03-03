@@ -25,11 +25,11 @@
                       <li>Valorant Name: {{ friend.profile.valorantName }}
                           <ul>
                               <li>Username: {{ friend.username }}</li>
+                              {% if friend.profile.looking_for_group %}
+                              <span style="color: orange;">Looking for group</span>
+                              {% endif %}
                               <li>Tagline: {{ friend.profile.valorantTagline }}</li>
-                              <li>Last Game Kills: {{ friend.profile.valorantKills }}</li>
-                              {% if friend.profile.is_online %}
-                                  <span style="color: green;">Online</span>
-                              {% else %}
+                              <li>Last Game Kills: {{ friend.profile.valorantKills }}</li>                  
                               <li>Last Game Deaths: {{ friend.profile.valorantDeaths }}</li>
                               {% if friend.profile.is_online %}
                                   <span style="color: green;">Online</span>
