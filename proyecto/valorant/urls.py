@@ -26,6 +26,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name="users/login.html"), name='login'),
     path('profile/<int:pk>',  user_views.profile, name='profile'),
     path('looking_for_group',  user_views.looking_for_group, name='looking_for_group'),
+    path('stop_looking_for_group',  user_views.stop_looking_for_group, name='stop_looking_for_group'),
     path('players_looking_for_group_on_your_elo/', user_views.players_looking_for_group_on_your_elo, name='players_looking_for_group_on_your_elo'),
     path('logout/', auth_views.LogoutView.as_view(template_name="users/logout.html"), name='logout'),
     path('terms/', user_views.TermsView.as_view(template_name="users/terms.html"), name='terms'),

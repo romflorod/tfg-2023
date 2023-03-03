@@ -20,10 +20,9 @@ def players_looking_for_group_on_your_elo(request):
     eloAux = request.user.profile.valorantCalculatedElo
     intElo = int(eloAux)
     users = list(User.objects.exclude(profile__valorantCalculatedElo="").exclude(profile=None).exclude(username=request.user.username))
-    
     filtered_users = []
+    contador = 0
     for usuario in users:
-        contador = 0
         print(usuario.profile.valorantCalculatedElo)
         eloBucleAux = int(usuario.profile.valorantCalculatedElo)
         print(eloBucleAux)
@@ -33,7 +32,6 @@ def players_looking_for_group_on_your_elo(request):
         if booleanoAux and booleanoAux2 and booleanoAux3:
             filtered_users.append(usuario)
             contador=contador+1
-        
     context = {'users': filtered_users}
     context.update({'cont': contador})
     return render(request, 'users/players_looking_for_group_on_your_elo.html', context)
@@ -74,6 +72,7 @@ def delete_friend(request, friend_request_id):
     request.user.save()
     FriendRequest.delete(friend_request)
     return render(request, 'users/friends_list.html')
+
 @login_required
 def reject_friend_request(request, friend_request_id):
     friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
@@ -159,6 +158,12 @@ def profile(request,pk):
 def looking_for_group(request):
     userGet=request.user
     userGet.profile.looking_for_group=True
+    userGet.save()
+    return render(request, 'users/home.html') 
+
+def stop_looking_for_group(request):
+    userGet=request.user
+    userGet.profile.looking_for_group=False
     userGet.save()
     return render(request, 'users/home.html') 
 
