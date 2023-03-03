@@ -19,26 +19,47 @@ import json
 def players_looking_for_group_on_your_elo(request):
     eloAux = request.user.profile.valorantCalculatedElo
     intElo = int(eloAux)
-    users = list(User.objects.all())
-    print(users)
+    users = list(User.objects.exclude(profile__valorantCalculatedElo="").exclude(profile=None))
     filtered_users = []
     for usuario in users:
+        print(usuario.profile.valorantCalculatedElo)
         eloBucleAux = int(usuario.profile.valorantCalculatedElo)
+        print(eloBucleAux)
         booleanoAux = (abs(eloBucleAux - intElo) < 100)
         booleanoAux2 = bool(usuario.profile.looking_for_group)
+        ##booleano 3 is online, meter dentro del  and
         if booleanoAux and booleanoAux2:
             filtered_users.append(usuario)
     context = {'users': filtered_users}
     return render(request, 'users/players_looking_for_group_on_your_elo.html', context)
+
 def users_list(request):
     users = User.objects.all().order_by('profile__valorantCalculatedElo')
+    userCont = list(User.objects.all())
+    usersConnected = list(User.objects.exclude(profile__is_online=False))
     useraux = request.user
     friendsaux = useraux.profile.friends.all()
     context = {'users': users}
     context.update({'friends': friendsaux})
+    context.update({'userContInt': len(userCont)})
+    context.update({'usersOnline': len(usersConnected)})
 
     return render(request, 'users/users_list.html', context)
+
+@login_required
 def accept_friend_request(request, friend_request_id):
+    friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
+    if request.user != friend_request.receiver:
+        return HttpResponseForbidden()
+    friend_request.accept()
+    friend_request.receiver.profile.friends.add(friend_request.sender)
+    friend_request.sender.profile.friends.add(friend_request.receiver)
+    request.user.save()
+    FriendRequest.delete(friend_request)
+    return render(request, 'users/friends_list.html')
+
+@login_required
+def delete_friend(request, friend_request_id):
     friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
     if request.user != friend_request.receiver:
         return HttpResponseForbidden()
