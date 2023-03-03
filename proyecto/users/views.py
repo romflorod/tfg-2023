@@ -19,18 +19,23 @@ import json
 def players_looking_for_group_on_your_elo(request):
     eloAux = request.user.profile.valorantCalculatedElo
     intElo = int(eloAux)
-    users = list(User.objects.exclude(profile__valorantCalculatedElo="").exclude(profile=None))
+    users = list(User.objects.exclude(profile__valorantCalculatedElo="").exclude(profile=None).exclude(username=request.user.username))
+    
     filtered_users = []
     for usuario in users:
+        contador = 0
         print(usuario.profile.valorantCalculatedElo)
         eloBucleAux = int(usuario.profile.valorantCalculatedElo)
         print(eloBucleAux)
         booleanoAux = (abs(eloBucleAux - intElo) < 100)
         booleanoAux2 = bool(usuario.profile.looking_for_group)
-        ##booleano 3 is online, meter dentro del  and
-        if booleanoAux and booleanoAux2:
+        booleanoAux3 = bool(usuario.profile.is_online)##booleano 3 is online, meter dentro del  and
+        if booleanoAux and booleanoAux2 and booleanoAux3:
             filtered_users.append(usuario)
+            contador=contador+1
+        
     context = {'users': filtered_users}
+    context.update({'cont': contador})
     return render(request, 'users/players_looking_for_group_on_your_elo.html', context)
 
 def users_list(request):
