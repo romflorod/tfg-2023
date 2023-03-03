@@ -86,11 +86,12 @@ class TermsView(ListView):
 
 def home(request):
     userAux=request.user
- 
+
     if(userAux.is_authenticated):
         auxList=[userAux.profile.valorantRegion,userAux.profile.valorantName,userAux.profile.valorantTagline]
         stats=getStatsCustom(auxList)
         userAux.refresh_from_db()
+        userAux.profile.is_online = True
         userAux.profile.valorantLeague=stats[0]
         userAux.profile.valorantRangue=stats[1]
         userAux.profile.valorantCurrentRR=stats[2]
@@ -115,7 +116,11 @@ def profile(request,pk):
     else:
         return render(request, 'users/home.html')
 
-   
+def looking_for_group(request):
+    userGet=request.user
+    userGet.profile.looking_for_group=True
+    userGet.save()
+    return render(request, 'users/home.html') 
 
 
 
@@ -170,6 +175,7 @@ def getStatsCustom(auxList):
         statlist=[league,range,currentRR,calculatedElo,valorantKills,valorantDeaths,valorantAssists,valorantBodyshots,valorantHeadshots]
     else:
         statlist=["error",0,0,0,0,0,0,0,0]
+    
    
 
     return statlist

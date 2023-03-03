@@ -29,6 +29,9 @@ class FriendRequest(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
+    is_online = models.BooleanField(blank=True,default=False)
+    looking_for_group = models.BooleanField(blank=True,default=False)
+
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     valorantName = models.TextField(max_length=20, blank=True)

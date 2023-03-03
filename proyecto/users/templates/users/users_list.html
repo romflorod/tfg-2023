@@ -11,6 +11,11 @@
         <li>Last Game Kills: {{ user.profile.valorantKills }}</li>
         <li>Last Game Deaths: {{ user.profile.valorantDeaths }}</li>
         <li>Calculated elo: {{ user.profile.valorantCalculatedElo }}</li>
+        {% if user.profile.is_online %}
+          <span style="color: green;">Online</span>
+        {% else %}
+          <span style="color: red;">Disconnected</span>
+        {% endif %}
         {% if user not in friends %}
           <li>
             <form action="{% url 'add_friend' friend_id=user.id %}" method="POST">

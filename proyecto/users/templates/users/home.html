@@ -22,4 +22,9 @@
             <a class="a2" href="{% url 'login' %}">Login</a>
         {% endif %}
     </div>
+    {% if not user.profile.looking_for_group %}
+        <div class="center">
+        <a class="btn btn-primary" href="{% url 'looking_for_group' %}">Looking for group</a>
+        </div>
+        {% endif %}
 {% endblock content %}

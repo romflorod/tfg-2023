@@ -27,7 +27,15 @@
                               <li>Username: {{ friend.username }}</li>
                               <li>Tagline: {{ friend.profile.valorantTagline }}</li>
                               <li>Last Game Kills: {{ friend.profile.valorantKills }}</li>
+                              {% if friend.profile.is_online %}
+                                  <span style="color: green;">Online</span>
+                              {% else %}
                               <li>Last Game Deaths: {{ friend.profile.valorantDeaths }}</li>
+                              {% if friend.profile.is_online %}
+                                  <span style="color: green;">Online</span>
+                              {% else %}
+                                  <span style="color: red;">Disconnected</span>
+                              {% endif %}
                           </ul>
                       </li>
                     {% empty %}
