@@ -42,7 +42,7 @@
                           <li>
                             <form action="{% url 'add_friend' friend_id=user.id %}" method="POST">
                               {% csrf_token %}
-                              <button type="submit">Send frend request</button>
+                              <button type="submit">Send friend request</button>
                             </form>
                           </li>
                         {% endif %}

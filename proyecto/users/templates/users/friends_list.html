@@ -29,13 +29,19 @@
                               <span style="color: orange;">Looking for group</span>
                               {% endif %}
                               <li>Tagline: {{ friend.profile.valorantTagline }}</li>
-                              <li>Last Game Kills: {{ friend.profile.valorantKills }}</li>                  
+                              <li>Last Game Kills: {{ friend.profile.valorantKills }}</li>
                               <li>Last Game Deaths: {{ friend.profile.valorantDeaths }}</li>
                               {% if friend.profile.is_online %}
                                   <span style="color: green;">Online</span>
                               {% else %}
                                   <span style="color: red;">Disconnected</span>
                               {% endif %}
+                              <li>
+                                <form action="{% url 'delete_friend' friend_id=friend.id %}" method="POST">
+                                  {% csrf_token %}
+                                  <button type="submit">Delete friend</button>
+                                </form>
+                              </li>
                           </ul>
                       </li>
                     {% empty %}

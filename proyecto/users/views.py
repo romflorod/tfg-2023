@@ -61,17 +61,7 @@ def accept_friend_request(request, friend_request_id):
     FriendRequest.delete(friend_request)
     return render(request, 'users/friends_list.html')
 
-@login_required
-def delete_friend(request, friend_request_id):
-    friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
-    if request.user != friend_request.receiver:
-        return HttpResponseForbidden()
-    friend_request.accept()
-    friend_request.receiver.profile.friends.add(friend_request.sender)
-    friend_request.sender.profile.friends.add(friend_request.receiver)
-    request.user.save()
-    FriendRequest.delete(friend_request)
-    return render(request, 'users/friends_list.html')
+
 
 @login_required
 def reject_friend_request(request, friend_request_id):
@@ -84,12 +74,14 @@ def reject_friend_request(request, friend_request_id):
     friend_request.reject()
     request.user.save()
     return render(request, 'users/friends_list.html',context)
+
 @login_required
 def friends_list(request):
     user = request.user
     friends = user.profile.friends.all()
     context = {'friends': friends}
     return render(request, 'users/friends_list.html', context)
+
 @login_required
 def add_friend(request, friend_id):
     friend = get_object_or_404(User, id=friend_id)
@@ -101,6 +93,18 @@ def add_friend(request, friend_id):
     if not created:
         return redirect('users_list') # La solicitud ya existe
     return redirect('users_list')
+
+@login_required
+def delete_friend(request, friend_id):
+    user = request.user
+    friend_user = get_object_or_404(User, id=friend_id)
+    user.profile.friends.remove(friend_user)
+    friend_user.profile.friends.remove(user)
+    user.save()
+    friend_user.save()
+    return redirect('friends_list')
+
+
 """
     friend = User.objects.get(id=friend_id)
     request.user.profile.friends.add(friend)
