@@ -61,7 +61,7 @@ def accept_friend_request(request, friend_request_id):
     friend_request.sender.profile.friends.add(friend_request.receiver)
     request.user.save()
     FriendRequest.delete(friend_request)
-    return render(request, 'users/friends_list.html')
+    return redirect('friends_list')
 
 
 
