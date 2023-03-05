@@ -20,6 +20,7 @@ def players_looking_for_group_on_your_elo(request):
     eloAux = request.user.profile.valorantCalculatedElo
     intElo = int(eloAux)
     users = list(User.objects.exclude(profile__valorantCalculatedElo="").exclude(profile=None).exclude(username=request.user.username))
+    friends = request.user.profile.friends.all()
     filtered_users = []
     contador = 0
     for usuario in users:
@@ -34,6 +35,7 @@ def players_looking_for_group_on_your_elo(request):
             contador=contador+1
     context = {'users': filtered_users}
     context.update({'cont': contador})
+    context.update({'friends': friends })
     return render(request, 'users/players_looking_for_group_on_your_elo.html', context)
 
 def users_list(request):
