@@ -72,9 +72,6 @@ def reject_friend_request(request, friend_request_id):
     print(friend_request_id)
     parseintid=int(friend_request_id)
     context = {'idDelete': parseintid}
-
-    friend_request.reject()
-    request.user.save()
     return render(request, 'users/friends_list.html',context)
 
 @login_required
@@ -88,7 +85,7 @@ def friends_list(request):
 def add_friend(request, friend_id):
     friend = get_object_or_404(User, id=friend_id)
     if(request.user.profile.id == friend_id):
-        return HttpResponseBadRequest("No puedes agregar tu propio usuario como amigo.")
+        return HttpResponseBadRequest("Cant add yourself as a friend")
     else:
         friend_request, created = FriendRequest.objects.get_or_create(sender=request.user, receiver=friend)
 
