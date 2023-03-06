@@ -38,7 +38,7 @@
                         {% else %}
                           <span style="color: red;">Disconnected</span>
                         {% endif %}
-                        {% if user not in friends %}
+                        {% if user not in friends and useraux != user %}
                           <li>
                             <form action="{% url 'add_friend' friend_id=user.id %}" method="POST">
                               {% csrf_token %}

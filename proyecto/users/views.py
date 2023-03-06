@@ -44,10 +44,12 @@ def users_list(request):
     usersConnected = list(User.objects.exclude(profile__is_online=False))
     useraux = request.user
     friendsaux = useraux.profile.friends.all()
+    
     context = {'users': users}
     context.update({'friends': friendsaux})
     context.update({'userContInt': len(userCont)})
     context.update({'usersOnline': len(usersConnected)})
+    context.update({'useraux': useraux})
 
     return render(request, 'users/users_list.html', context)
 
