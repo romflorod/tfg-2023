@@ -1,0 +1,40 @@
+body{
+    margin-top: 20px;
+    background-color: lightgray;
+}
+
+.main{
+
+    padding: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.ul {
+    background: #3399ff;
+    padding: 20px;
+}
+
+.sidebar{
+    background-color: #333;
+    color: white;
+    height: 100%;
+}
+
+.sidebar a{
+    background-color: #290;
+    display: block;
+    color: white;
+    padding-bottom: 10px;
+    font-size: 30px;
+    text-decoration: none;
+}
+
+.card{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.content{
+    background-color: whitesmoke;
+}

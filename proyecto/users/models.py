@@ -13,6 +13,17 @@ REGIONCHOICES=[
         ('KR','KR'),
 ]
 
+class Equipo(models.Model):
+    nombre = models.CharField(max_length=100)
+    jugador1 = models.ForeignKey(User, related_name='equipo_jugador1', on_delete=models.CASCADE)
+    jugador2 = models.ForeignKey(User, related_name='equipo_jugador2', on_delete=models.CASCADE)
+    jugador3 = models.ForeignKey(User, related_name='equipo_jugador3', on_delete=models.CASCADE)
+    jugador4 = models.ForeignKey(User, related_name='equipo_jugador4', on_delete=models.CASCADE)
+    jugador5 = models.ForeignKey(User, related_name='equipo_jugador5', on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.nombre
+
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='friend_requests_sent', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='friend_requests_received', on_delete=models.CASCADE)
