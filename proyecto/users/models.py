@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+import random
 
 REGIONCHOICES=[
         ('NA','NA'),
@@ -13,16 +14,29 @@ REGIONCHOICES=[
         ('KR','KR'),
 ]
 
-class Equipo(models.Model):
-    nombre = models.CharField(max_length=100)
-    jugador1 = models.ForeignKey(User, related_name='equipo_jugador1', on_delete=models.CASCADE)
-    jugador2 = models.ForeignKey(User, related_name='equipo_jugador2', on_delete=models.CASCADE)
-    jugador3 = models.ForeignKey(User, related_name='equipo_jugador3', on_delete=models.CASCADE)
-    jugador4 = models.ForeignKey(User, related_name='equipo_jugador4', on_delete=models.CASCADE)
-    jugador5 = models.ForeignKey(User, related_name='equipo_jugador5', on_delete=models.CASCADE)
-    
+class Team(models.Model):
+    name = models.CharField(max_length=100)
+    player1 = models.ForeignKey(User, related_name='team_player1', on_delete=models.CASCADE)
+    player2 = models.ForeignKey(User, related_name='team_player2', on_delete=models.CASCADE)
+    player3 = models.ForeignKey(User, related_name='team_player3', on_delete=models.CASCADE)
+    player4 = models.ForeignKey(User, related_name='team_player4', on_delete=models.CASCADE)
+    player5 = models.ForeignKey(User, related_name='team_player5', on_delete=models.CASCADE)
+
     def __str__(self):
         return self.nombre
+
+class Tournament(models.Model):
+    nombre = models.CharField(max_length=100)
+    teams = models.ManyToManyField(Team)
+
+    def __str__(self):
+        return self.nombre
+
+def reound_of_8(teams):
+    random.shuffle(teams)
+    cuartos = [teams[i:i+2] for i in range(0, len(teams), 2)]
+
+    return cuartos
 
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='friend_requests_sent', on_delete=models.CASCADE)

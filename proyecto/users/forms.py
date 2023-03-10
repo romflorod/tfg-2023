@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from users.models import Profile
+from users.models import Team
 from django.forms import DateInput
 
 REGIONCHOICES=[
@@ -11,6 +12,11 @@ REGIONCHOICES=[
         ('AP','AP'),
         ('KR','KR'),
 ]
+
+class TeamForm(forms.ModelForm):
+    class Meta:
+        model = Team
+        fields = ('name', 'player1', 'player2', 'player3', 'player4', 'player5')
 
 class DateInput(forms.DateInput):
     input_type = 'date'

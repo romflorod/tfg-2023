@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm
 from .forms import EditProfileForm
-from users.models import Profile,FriendRequest
+from .forms import TeamForm
+from users.models import Profile,FriendRequest, Team
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
@@ -13,6 +14,36 @@ from django.http import HttpResponseForbidden,HttpResponseBadRequest
 
 import requests
 import json
+
+@login_required
+def create_team(request):
+    if request.method == 'POST':
+        form = TeamForm(request.POST)
+        if form.is_valid():
+            # Obtener los valores de los campos del formulario
+            name = form.cleaned_data['name']
+            username_players = [form.cleaned_data[f'player{i}'] for i in range(1, 6)]
+            
+            # Buscar los usuarios correspondientes a los usernames ingresados
+            players = []
+            for username in username_players:
+                try:
+                    player = User.objects.get(username=username)
+                except User.DoesNotExist:
+                    # Si no existe el usuario, mostrar un error
+                    form.add_error(f'player{len(players)+1}', f'Ther user "{username}" does not exist')
+                    return render(request, 'users/create_team.html', {'form': form})
+                players.append(player)
+            
+            # Crear el equipo y las relaciones con los jugadores
+            team = Team(name=name, player1=players[0], player2=players[1], player3=players[2], player4=players[3], player5=players[4])
+            team.save()
+            
+            return redirect('home')
+    else:
+        form = TeamForm()
+    
+    return render(request, 'users/create_team.html', {'form': form})
 
 
 @login_required
@@ -81,7 +112,7 @@ def friends_list(request):
     user = request.user
     friends = user.profile.friends.all()
     context = {'friends': friends}
-    return render(request, 'users/friends_list.html', context)
+    return render(request, 'users/friends_list.html',context)#preguntar como hacer la redirección
 
 @login_required
 def add_friend(request, friend_id):

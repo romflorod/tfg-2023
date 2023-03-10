@@ -36,6 +36,8 @@ urlpatterns = [
     path('accept_friend_request/<int:friend_request_id>/', user_views.accept_friend_request, name='accept_friend_request'),
     path('reject-friend-request/<int:friend_request_id>/', user_views.reject_friend_request, name='reject_friend_request'),
     path('profile/editprofile/<int:pk>', user_views.editprofile, name='editprofile'),
-    path('users_list/', user_views.users_list, name='users_list'),]
+    path('users_list/', user_views.users_list, name='users_list'),
+    path('create_team/', user_views.create_team, name='create_team'),
+    ]
 
 urlpatterns+= staticfiles_urlpatterns()
