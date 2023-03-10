@@ -26,14 +26,19 @@ def create_team(request):
             
             # Buscar los usuarios correspondientes a los usernames ingresados
             players = []
+            verified_usernames = []
             for username in username_players:
+                if username in verified_usernames:
+                    form.add_error(f'player{len(players)+1}', f'Thee user "{username}" has already been assigned to a team')
+                    return render(request, 'users/create_team.html', {'form': form})
                 try:
                     player = User.objects.get(username=username)
                 except User.DoesNotExist:
                     # Si no existe el usuario, mostrar un error
-                    form.add_error(f'player{len(players)+1}', f'Ther user "{username}" does not exist')
+                    form.add_error(f'player{len(players)+1}', f'The user "{username}" does not exist')
                     return render(request, 'users/create_team.html', {'form': form})
                 players.append(player)
+                verified_usernames.append(username)
             
             # Crear el equipo y las relaciones con los jugadores
             team = Team(name=name, player1=players[0], player2=players[1], player3=players[2], player4=players[3], player5=players[4])
