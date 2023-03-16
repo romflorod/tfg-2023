@@ -115,42 +115,34 @@ def match_detail(request, match_id):
 
 @login_required
 def create_team(request):
+    form = TeamForm()
     if request.method == 'POST':
         form = TeamForm(request.POST)
-        if form.is_valid():
-            # Obtener los valores de los campos del formulario
-            name = form.cleaned_data['name']
-            username_players = [form.cleaned_data[f'player{i}'] for i in range(1, 6)]
-            
-            # Buscar los usuarios correspondientes a los usernames ingresados
-            players = []
-            verified_usernames = []
-            for username in username_players:
-                if username in verified_usernames:
-                    form.add_error(f'player{len(players)+1}', f'The user "{username}" has already been assigned to a team')
-                    return render(request, 'users/create_team.html', {'form': form})
-                try:
-                    player = User.objects.get(username=username)
-                    # Verificar si el usuario ya está en un equipo
-                    if Team.objects.filter(Q(player1=player) | Q(player2=player) | Q(player3=player) | Q(player4=player) | Q(player5=player)).exists():
-                        form.add_error(f'player{len(players)+1}', f'The user "{username}" is already assigned to a team')
-                except User.DoesNotExist:
-                    # Si no existe el usuario, mostrar un error
-                    form.add_error(f'player{len(players)+1}', f'The user "{username}" does not exist')
-                    return render(request, 'users/create_team.html', {'form': form})
-                players.append(player)
-                verified_usernames.append(username)
-            
-            # Crear el equipo y las relaciones con los jugadores
-            team = Team(name=name, player1=players[0], player2=players[1], player3=players[2], player4=players[3], player5=players[4])
-            team.save()
-            
-            return redirect('home')
-    else:
-        form = TeamForm()
-    
-    return render(request, 'users/create_team.html', {'form': form})
+    if form.is_valid():
+        name = form.cleaned_data['name']
+        username_players = [form.cleaned_data[f'player{i}'] for i in range(1, 6)]
+        players = []
+        existing_players = []
+        for username in username_players:
+            try:
+                player = User.objects.get(username=username)
+                if Team.objects.filter(Q(player1=player) | Q(player2=player) | Q(player3=player) | Q(player4=player) | Q(player5=player)).exists():
+                    existing_players.append(player)
+                else:
+                    players.append(player)
+            except User.DoesNotExist:
+                form.add_error(f'player{len(players)+1}', f'The user "{username}" does not exist')
 
+        if existing_players:
+            players_str = ', '.join([str(player) for player in existing_players])
+            form.add_error(None, f'The following players already belong to a team: {players_str}. Please select other players.')
+        elif len(players) < 5:
+            form.add_error(None, 'Please select five players for the team.')
+        else:
+            team = Team.objects.create(name=name)
+            team.players.add(*players)
+            return redirect('home')
+    return render(request, 'users/create_team.html', {'form': form})
 
 @login_required
 def players_looking_for_group_on_your_elo(request):
@@ -161,7 +153,9 @@ def players_looking_for_group_on_your_elo(request):
     filtered_users = []
     contador = 0
     for usuario in users:
+        print(usuario.profile.valorantCalculatedElo)
         eloBucleAux = int(usuario.profile.valorantCalculatedElo)
+        print(eloBucleAux)
         booleanoAux = (abs(eloBucleAux - intElo) < 100)
         booleanoAux2 = bool(usuario.profile.looking_for_group)
         booleanoAux3 = bool(usuario.profile.is_online)##booleano 3 is online, meter dentro del  and
@@ -205,6 +199,8 @@ def accept_friend_request(request, friend_request_id):
 @login_required
 def reject_friend_request(request, friend_request_id):
     friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
+    print("holaaaaaaaa")
+    print(friend_request_id)
     parseintid=int(friend_request_id)
     context = {'idDelete': parseintid}
     return render(request, 'users/friends_list.html',context)
@@ -344,7 +340,7 @@ def getStatsCustom(auxList):
             calculatedElo=calculatedElo+500
         if(league=="Ascendant"):
             calculatedElo=calculatedElo+600
-        if(league=="Immortal"):
+        if(league=="Inmortal"):
             calculatedElo=calculatedElo+700
         if(league=="Radiant"):
             calculatedElo=calculatedElo+800
