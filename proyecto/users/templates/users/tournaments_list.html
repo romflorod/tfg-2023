@@ -1,0 +1,12 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+  <h1>Tournaments</h1>
+  <ul>
+    {% for tournament in tournaments %}
+      <li><a href="{% url 'tournament_detail' tournament.pk %}">{{ tournament.name }}</a></li>
+    {% empty %}
+      <li>No tournaments to display</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

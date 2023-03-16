@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
-from users.models import Profile
+from users.models import Profile, Tournament
 from users.models import Team
 from django.forms import DateInput
 
@@ -12,6 +12,19 @@ REGIONCHOICES=[
         ('AP','AP'),
         ('KR','KR'),
 ]
+class TournamentForm(forms.ModelForm):
+    class Meta:
+        model = Tournament
+        fields = ['name', 'teams']
+
+    name = forms.CharField(max_length=100)
+    teams = forms.ModelMultipleChoiceField(queryset=Team.objects.all(), widget=forms.CheckboxSelectMultiple)
+
+    def clean_teams(self):
+        teams = self.cleaned_data.get('teams')
+        if len(teams) != 8:
+            raise forms.ValidationError("You must select exactly 8 teams.")
+        return teams
 
 class TeamForm(forms.ModelForm):
     class Meta:

@@ -5,7 +5,16 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+
+
 import random
+
+STAGECHOICES = [
+    ('O', 'Octavos de final'),
+    ('Q', 'Cuartos de final'),
+    ('SF', 'Semifinales'),
+    ('F', 'Final'),
+]
 
 REGIONCHOICES=[
         ('NA','NA'),
@@ -13,6 +22,13 @@ REGIONCHOICES=[
         ('AP','AP'),
         ('KR','KR'),
 ]
+
+STATUSCHOICES=[
+        ('open','open'),
+        ('in progress','in progress'),
+        ('completed','completed'),
+]
+
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
@@ -23,20 +39,74 @@ class Team(models.Model):
     player5 = models.ForeignKey(User, related_name='team_player5', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.nombre
+        return self.name
+
 
 class Tournament(models.Model):
-    nombre = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     teams = models.ManyToManyField(Team)
+    status = models.CharField(max_length=20, choices=STATUSCHOICES, default='open')
+    winner = models.ForeignKey(Team, related_name='tournament_winner', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.nombre
+        return self.name
 
-def reound_of_8(teams):
-    random.shuffle(teams)
-    cuartos = [teams[i:i+2] for i in range(0, len(teams), 2)]
+    def round_of_8(self):
+        # Obtener los equipos del torneo
+        teams = self.teams.all()
+        # Verificar que hayan exactamente 8 equipos
+        if len(teams) != 8:
+            return None
+        # Mezclar los equipos aleatoriamente
+        shuffled_teams = list(teams)
+        random.shuffle(shuffled_teams)
+        # Crear los partidos para la ronda de cuartos
+        matches = [self.create_match(shuffled_teams[i], shuffled_teams[i+1], 'Q') for i in range(0, 8, 2)]
+        return matches
 
-    return cuartos
+    def round_of_4(self):
+        # Obtener los equipos ganadores de la ronda de cuartos
+        winning_teams = [match.winner for match in self.match_set.filter(round='Q')]
+        # Verificar que hayan exactamente 4 equipos ganadores
+        if len(winning_teams) != 4:
+            return None
+        # Mezclar los equipos aleatoriamente
+        shuffled_teams = list(winning_teams)
+        random.shuffle(shuffled_teams)
+        # Crear los partidos para la ronda de semifinales
+        matches = [self.create_match(shuffled_teams[i], shuffled_teams[i+1], 'SF') for i in range(0, 4, 2)]
+        return matches
+
+    def round_of_2(self):
+        # Obtener los equipos ganadores de la ronda de semifinales
+        winning_teams = [match.winner for match in self.match_set.filter(round='SF')]
+        # Verificar que hayan exactamente 2 equipos ganadores
+        if len(winning_teams) != 2:
+            return None
+        # Mezclar los equipos aleatoriamente
+        shuffled_teams = list(winning_teams)
+        random.shuffle(shuffled_teams)
+        # Crear el partido para la final
+        match = self.create_match(shuffled_teams[0], shuffled_teams[1], 'F')
+        return [match]
+
+    def final(self):
+        # Obtener el equipo ganador del torneo
+        return self.winner
+
+class Match(models.Model):
+    tournament = models.ForeignKey(Tournament, related_name='matches', on_delete=models.CASCADE)
+    team1 = models.ForeignKey(Team, related_name='team1_matches', on_delete=models.CASCADE)
+    team2 = models.ForeignKey(Team, related_name='team2_matches', on_delete=models.CASCADE)
+    winner = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True, related_name='won_matches')
+    stage = models.CharField(max_length=2, choices=STAGECHOICES, default='O')
+
+    def play(self):
+        # Aquí iría la lógica para jugar un partido entre dos equipos
+        # y determinar quién gana.
+        team1 = self.team1
+        team2 = self.team2
+        return team1 if random.choice([True, False]) else team2
 
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='friend_requests_sent', on_delete=models.CASCADE)

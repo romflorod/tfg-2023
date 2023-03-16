@@ -38,6 +38,11 @@ urlpatterns = [
     path('profile/editprofile/<int:pk>', user_views.editprofile, name='editprofile'),
     path('users_list/', user_views.users_list, name='users_list'),
     path('create_team/', user_views.create_team, name='create_team'),
+    path('create_tournament/', user_views.create_tournament, name='create_tournament'),
+    path('tournaments_results/<int:tournament_id>/', user_views.tournament_results, name='tournaments_results'),
+    path('tournaments_list/', user_views.tournaments_list, name='tournaments_list'),
+    path('tournament/<int:tournament_id>/', user_views.tournament_detail, name='tournament_detail'),
+    path('match/<int:match_id>/', user_views.match_detail, name='match_detail'),
     ]
 
 urlpatterns+= staticfiles_urlpatterns()

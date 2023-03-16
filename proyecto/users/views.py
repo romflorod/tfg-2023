@@ -2,18 +2,116 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignupForm
+from .forms import SignupForm, TournamentForm
 from .forms import EditProfileForm
 from .forms import TeamForm
-from users.models import Profile,FriendRequest, Team
+from users.models import Match, Profile,FriendRequest, Team, Tournament
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseForbidden,HttpResponseBadRequest
-
+import random
 import requests
 import json
+from django.db.models import Q
+
+@login_required
+def tournament_detail(request, tournament_id):
+    tournament = get_object_or_404(Tournament, pk=tournament_id)
+    context = {'tournament': tournament}
+    return render(request, 'users/tournament_detail.html', context)
+
+@login_required
+def tournaments_list(request):
+    tournaments = Tournament.objects.all()
+    context = {'tournaments': tournaments}
+    return render(request, 'users/tournaments_list.html', context)
+
+@login_required
+def tournament_results(request, tournament_id):
+    tournament = get_object_or_404(Tournament, id=tournament_id)
+    matches = Match.objects.filter(tournament_id=tournament_id)
+    rounds = {
+        'quarterfinals': [[team.name for team in match] for match in matches.filter(stage='Q')],
+        'semifinals': [[team.name for team in match] for match in matches.filter(stage='S')],
+        'final': [team.name for team in matches.filter(stage='F')],
+    }
+    context = {'tournament': tournament, 'rounds': rounds}
+    return render(request, 'users/tournaments_results.html', context)
+
+
+
+@login_required
+def create_tournament(request):
+    if request.method == 'POST':
+        form = TournamentForm(request.POST)
+        if form.is_valid():
+            # Obtener los valores de los campos del formulario
+            name = form.cleaned_data['name']
+            teams = form.cleaned_data['teams']
+            if len(teams) != 8:
+                form.add_error('teams', 'The tournament must have exactly 8 teams')
+                return render(request, 'users/create_tournament.html', {'form': form})
+
+            # Crear el torneo y las relaciones con los equipos
+            tournament = Tournament(name=name)
+            tournament.save()
+            tournament.teams.set(teams)
+
+            # Obtener los equipos y barajarlos
+            teams = list(tournament.teams.all())
+            random.shuffle(teams)
+
+            matches = []
+            for i in range(0, len(teams), 2):
+                match = Match(team1=teams[i], team2=teams[i+1], tournament_id=tournament.id)
+                match.save()
+                matches.append(match)
+
+            while len(matches) > 1:
+                winners = []
+                for i in range(0, len(matches), 2):
+                    match1 = matches[i]
+                    match2 = matches[i+1]
+                    winner = play_match(match1, match2)
+                    winners.append(winner)
+
+                if len(winners) == 1:
+                    # Si solo queda un equipo, es el ganador del torneo
+                    break
+
+                matches = winners
+
+            # Mostrar los resultados del torneo
+            rounds = {
+                'quarterfinals': [[team.name for team in match.teams.all()] for match in tournament.matches.filter(stage='Q')],
+                'semifinals': [[team.name for team in match.teams.all()] for match in tournament.matches.filter(stage='S')],
+                'final': [team.name for team in tournament.matches.filter(stage='F')],
+            }
+
+            context = {'tournament': tournament, 'rounds': rounds}
+            return render(request, 'users/create_tournament.html', context)
+    else:
+        form = TournamentForm()
+
+    return render(request, 'users/create_tournament.html', {'form': form})
+
+
+def play_match(team1, team2):
+    # Aquí iría la lógica para jugar un partido entre dos equipos
+    # y determinar quién gana. Por ejemplo, podrías generar un
+    # resultado aleatorio o utilizar algún algoritmo más sofisticado.
+    # En este ejemplo, simplemente se devuelve uno de los equipos al azar.
+    return team1 if random.choice([True, False]) else team2
+
+def match_detail(request, match_id):
+    match = Match.objects.get(id=match_id)
+    if request.method == 'POST':
+        match.winner = play_match(match.team1, match.team2)
+        match.save()
+    return render(request, 'users/match_detail.html', {'match': match})
+
 
 @login_required
 def create_team(request):
@@ -29,10 +127,13 @@ def create_team(request):
             verified_usernames = []
             for username in username_players:
                 if username in verified_usernames:
-                    form.add_error(f'player{len(players)+1}', f'Thee user "{username}" has already been assigned to a team')
+                    form.add_error(f'player{len(players)+1}', f'The user "{username}" has already been assigned to a team')
                     return render(request, 'users/create_team.html', {'form': form})
                 try:
                     player = User.objects.get(username=username)
+                    # Verificar si el usuario ya está en un equipo
+                    if Team.objects.filter(Q(player1=player) | Q(player2=player) | Q(player3=player) | Q(player4=player) | Q(player5=player)).exists():
+                        form.add_error(f'player{len(players)+1}', f'The user "{username}" is already assigned to a team')
                 except User.DoesNotExist:
                     # Si no existe el usuario, mostrar un error
                     form.add_error(f'player{len(players)+1}', f'The user "{username}" does not exist')

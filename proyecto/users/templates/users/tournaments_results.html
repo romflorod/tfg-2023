@@ -1,0 +1,37 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<h1>{{ tournament.name }}</h1>
+
+{% if tournament.status == 'open' %}
+<p>The tournament has not started yet.</p>
+{% elif tournament.status == 'closed' %}
+<p>The tournament has already finished.</p>
+{% else %}
+{% if rounds.quarterfinals %}
+<h2>Quarterfinals</h2>
+<ul>
+{% for match in rounds.quarterfinals %}
+    <li>{{ match.0 }} vs {{ match.1 }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if rounds.semifinals %}
+<h2>Semifinals</h2>
+<ul>
+{% for match in rounds.semifinals %}
+    <li>{{ match.0 }} vs {{ match.1 }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if rounds.final %}
+<h2>Final</h2>
+<ul>
+    <li>{{ rounds.final.0 }} is the winner!</li>
+</ul>
+{% endif %}
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+  <h1>{{ tournament.name }}</h1>
+  <p>Teams:</p>
+  <ul>
+    {% for team in tournament.teams.all %}
+      <li>{{ team.name }}</li>
+    {% endfor %}
+  </ul>
+  <p>Status: {{ tournament.status }}</p>
+  {% if tournament.status == 'closed' %}
+    <p>Winner: {{ tournament.winner.name }}</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+  <h1>Match Details</h1>
+  <p><strong>Team 1:</strong> {{ match.team1.name }}</p>
+  <p><strong>Team 2:</strong> {{ match.team2.name }}</p>
+  <p><strong>Winner:</strong> {{ match.winner.name }}</p>
+{% endblock %}
