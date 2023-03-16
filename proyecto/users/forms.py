@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
-from users.models import Profile, Tournament
+from users.models import Profile, Tournament,Message
 from users.models import Team
 from django.forms import DateInput
 
@@ -12,6 +12,10 @@ REGIONCHOICES=[
         ('AP','AP'),
         ('KR','KR'),
 ]
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ('content',)
 class TournamentForm(forms.ModelForm):
     class Meta:
         model = Tournament

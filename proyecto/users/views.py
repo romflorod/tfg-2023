@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignupForm, TournamentForm
+from .forms import SignupForm, TournamentForm,MessageForm
 from .forms import EditProfileForm
 from .forms import TeamForm
-from users.models import Match, Profile,FriendRequest, Team, Tournament
+from users.models import Match, Profile,FriendRequest, Team, Tournament, Message
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
@@ -15,6 +15,30 @@ import random
 import requests
 import json
 from django.db.models import Q
+@login_required
+def messages(request, username=None):
+    user = request.user
+    if username:
+        other_user = get_object_or_404(User, username=username)
+        messages = Message.objects.filter(sender=user, recipient=other_user).order_by('date_sent') | Message.objects.filter(sender=other_user, recipient=user)
+    else:
+        other_user = None
+        messages = Message.objects.filter(recipient=user)
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = user
+            message.recipient = other_user
+            message.save()
+            return redirect('messages')
+    else:
+        form = MessageForm()
+
+    users = User.objects.exclude(id=user.id)
+
+    return render(request, 'users/messages.html', {'users': users, 'messages': messages, 'other_user': other_user, 'form': form})
 
 @login_required
 def tournament_detail(request, tournament_id):

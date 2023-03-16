@@ -29,6 +29,11 @@ STATUSCHOICES=[
         ('completed','completed'),
 ]
 
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    content = models.TextField()
+    date_sent = models.DateTimeField(auto_now_add=True)
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
@@ -122,6 +127,7 @@ class FriendRequest(models.Model):
         self.delete()
 
 class Profile(models.Model):
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     is_online = models.BooleanField(blank=True,default=False)

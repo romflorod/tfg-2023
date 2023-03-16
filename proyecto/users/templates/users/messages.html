@@ -1,0 +1,100 @@
+{% extends 'users/base.html' %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Users</h2>
+      <ul class="user-list">
+        {% for u in users %}
+          <li><a href="{% url 'messages' username=u.username %}">{{ u.username }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-md-8">
+      {% if other_user %}
+        <h2>Chat with {{ other_user.username }}</h2>
+        <div id="message-list">
+          {% for m in messages %}
+            {% if m.sender == user %}
+              <div class="message-sent">
+                <p>{{ m.content }}</p>
+                <span>{{ m.timestamp|date:"F j, Y, g:i a" }}</span>
+              </div>
+            {% else %}
+              <div class="message-received">
+                <p>{{ m.content }}</p>
+                <span>{{ m.timestamp|date:"F j, Y, g:i a" }}</span>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <form method="POST" action="">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input type="submit" value="Send">
+        </form>
+      {% else %}
+        <h2>Inbox</h2>
+        <ul>
+          {% for m in messages %}
+            <li><a href="{% url 'messages' username=m.sender.username %}">{{ m.sender.username }}</a>: {{ m.content }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+  <style>
+    ul.user-list {
+      padding: 0;
+      margin: 0;
+    }
+    ul.user-list li {
+      list-style: none;
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    #message-list {
+      max-height: 400px;
+      overflow-y: scroll;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+  
+    .message-sent {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #e6f2ff;
+      border-radius: 10px;
+      float: right;
+      clear: both;
+      max-width: 60%;
+    }
+  
+    .message-received {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 10px;
+      float: left;
+      clear: both;
+      max-width: 60%;
+    }
+  
+    .message-sent p, .message-received p {
+      margin: 0;
+      padding: 0;
+    }
+  
+    .message-sent span, .message-received span {
+      display: block;
+      margin-top: 5px;
+      font-size: 0.8rem;
+    }
+  </style>
+  
+{% endblock %}
