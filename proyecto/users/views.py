@@ -161,9 +161,7 @@ def players_looking_for_group_on_your_elo(request):
     filtered_users = []
     contador = 0
     for usuario in users:
-        print(usuario.profile.valorantCalculatedElo)
         eloBucleAux = int(usuario.profile.valorantCalculatedElo)
-        print(eloBucleAux)
         booleanoAux = (abs(eloBucleAux - intElo) < 100)
         booleanoAux2 = bool(usuario.profile.looking_for_group)
         booleanoAux3 = bool(usuario.profile.is_online)##booleano 3 is online, meter dentro del  and
@@ -207,8 +205,6 @@ def accept_friend_request(request, friend_request_id):
 @login_required
 def reject_friend_request(request, friend_request_id):
     friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
-    print("holaaaaaaaa")
-    print(friend_request_id)
     parseintid=int(friend_request_id)
     context = {'idDelete': parseintid}
     return render(request, 'users/friends_list.html',context)
@@ -348,7 +344,7 @@ def getStatsCustom(auxList):
             calculatedElo=calculatedElo+500
         if(league=="Ascendant"):
             calculatedElo=calculatedElo+600
-        if(league=="Inmortal"):
+        if(league=="Immortal"):
             calculatedElo=calculatedElo+700
         if(league=="Radiant"):
             calculatedElo=calculatedElo+800
@@ -358,6 +354,11 @@ def getStatsCustom(auxList):
             currentRR=currentRR.replace("RR.","")
         if("RR" in currentRR):
             currentRR=currentRR.replace("RR","")     
+            
+        if(range == ""):
+            range=0
+        
+
         calculatedElo=calculatedElo+int(range)+int(currentRR)
         statlist=[league,range,currentRR,calculatedElo,valorantKills,valorantDeaths,valorantAssists,valorantBodyshots,valorantHeadshots]
     else:
