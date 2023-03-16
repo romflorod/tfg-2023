@@ -359,7 +359,7 @@ def getStatsCustom(auxList):
             range=0
         
 
-        calculatedElo=calculatedElo+int(range)+int(currentRR)
+        calculatedElo=calculatedElo+int(range)*33+int(currentRR)
         statlist=[league,range,currentRR,calculatedElo,valorantKills,valorantDeaths,valorantAssists,valorantBodyshots,valorantHeadshots]
     else:
         statlist=["error",0,0,0,0,0,0,0,0]
