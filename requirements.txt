@@ -4,3 +4,4 @@ psycopg2-binary==2.9.3
 wheel==0.38.1
 whitenoise==6.0.0
 Django==3.2.8
+pysqlite3==0.4.6

@@ -1,0 +1,17 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "valorant",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      { "handle": "filesystem" },
+      { "src": "/(.*)", "dest": "valorant/main.py" }
+    ],
+    "env": {
+      "PYTHONUNBUFFERED": "true"
+    }
+} 
+   
