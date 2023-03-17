@@ -9,4 +9,37 @@
       <li>No tournaments to display</li>
     {% endfor %}
   </ul>
+
+  <body>
+    <div class="sidebar">
+        <ul>
+          <li><a href="{% url 'create_team' %}">Create Team</a></li>
+          <li><a href="{% url 'create_tournament' %}">Create Tournament</a></li>
+          <li><a href="{% url 'tournaments_results' tournament_id=1 %}">Tournament Results</a></li>
+          <li><a href="{% url 'tournaments_list' %}">Tournaments List</a></li>
+          <li><a href="{% url 'tournament_detail' tournament_id=1 %}">Tournament Detail</a></li>
+        </ul>
+      </div>
+      
+      <button class="menu-toggle">
+        <span class="sr-only">Toggle Menu</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      
+      
+  
+<body>
+
+ <script>
+    var menuToggle = document.querySelector('.menu-toggle');
+    var sidebar = document.querySelector('.sidebar');
+      
+    menuToggle.addEventListener('click', function() {
+    sidebar.classList.toggle('show');
+    });
+</script>
+
 {% endblock %}

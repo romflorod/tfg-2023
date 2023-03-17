@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-5q3lqyOJN0BQ5FAkiiCH6OVDWeZJ8CZ07zNm6pznDm7wIqbE8iV7axU9XfwuI7Qk6Z0Ua7wgMls+DtrjLwLfEw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    /* Estilos generales del sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -200px;
+      width: 200px;
+      height: 100%;
+      background-color: #333;
+      z-index: 999;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    .sidebar.show {
+      left: 0;
+    }
+    
+    .sidebar ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    
+    .sidebar li {
+      padding: 10px;
+      border-bottom: 1px solid #555;
+      display: flex;
+      align-items: center;
+    }
+    
+    .sidebar li:hover {
+      background-color: #555;
+    }
+    
+    /* Iconos de Font Awesome */
+    .sidebar li a:before {
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      margin-right: 10px;
+    }
+    
+    .sidebar li a[href*="create_team"]:before {
+      content: "\f234";
+    }
+    
+    .sidebar li a[href*="create_tournament"]:before {
+      content: "\f0c0";
+    }
+    
+    .sidebar li a[href*="tournaments_results"]:before {
+      content: "\f0c9";
+    }
+    
+    .sidebar li a[href*="tournaments_list"]:before {
+      content: "\f03a";
+    }
+    
+    .sidebar li a[href*="tournament_detail"]:before {
+      content: "\f205";
+    }
+    
+    /* Estilos para dispositivos móviles */
+    @media screen and (max-width: 768px) {
+      .sidebar {
+        left: -100%;
+      }
+      
+      .sidebar.show {
+        left: 0;
+      }
+    }
+  </style>
+  
+
+</head>
+
+</html>
+
+<body>
+    <div class="sidebar">
+        <ul>
+          <li><a href="{% url 'create_team' %}">Create Team</a></li>
+          <li><a href="{% url 'create_tournament' %}">Create Tournament</a></li>
+          <li><a href="{% url 'tournaments_results' tournament_id=1 %}">Tournament Results</a></li>
+          <li><a href="{% url 'tournaments_list' %}">Tournaments List</a></li>
+          <li><a href="{% url 'tournament_detail' tournament_id=1 %}">Tournament Detail</a></li>
+        </ul>
+      </div>
+      
+      <button class="menu-toggle">
+        <span class="sr-only">Toggle Menu</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      
+      
+  
+<body>
+
+ <script>
+    var menuToggle = document.querySelector('.menu-toggle');
+    var sidebar = document.querySelector('.sidebar');
+      
+    menuToggle.addEventListener('hover', function() {
+    sidebar.classList.toggle('show');
+    });
+</script>

@@ -2,6 +2,8 @@
 <html>
 
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-5q3lqyOJN0BQ5FAkiiCH6OVDWeZJ8CZ07zNm6pznDm7wIqbE8iV7axU9XfwuI7Qk6Z0Ua7wgMls+DtrjLwLfEw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <style>
     /* Navbar */
     .mdb-color.lighten-3 {
@@ -54,85 +56,104 @@
 
 <body>
 
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark scrolling-navbar" style="background-color: #000000">
-  <div class="container">
-    
-    <!-- Brand -->
-    <a class="navbar-brand" href="/">
-      <strong class="blue-text"></strong>
-    </a>
-    <!-- Links -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-      <!-- Left -->
-      <ul class="navbar-nav mr-auto">
-      </ul>
-
-      <!-- Right -->
-      <ul class="navbar-nav nav-flex-icons">
-        <li class="nav-item">
-          {% if user.is_authenticated %}
-            <a href="{% url 'profile' request.user.profile.id %} " class="btn-default nav-link waves-effect" >
-              <span class="clearfix d-none d-sm-inline-block"> My profile </span>
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark scrolling-navbar" style="background-color: #000000">
+    <div class="container">
+      
+      <!-- Brand -->
+      <a class="navbar-brand" href="/">
+        <strong class="blue-text"></strong>
+      </a>
+      
+      <!-- Links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  
+        <!-- Left -->
+        <ul class="navbar-nav mr-auto">
+        </ul>
+  
+        <!-- Right -->
+        <ul class="navbar-nav nav-flex-icons">
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+              <a href="{% url 'profile' request.user.profile.id %} " class="btn-default nav-link waves-effect" >
+                <i class="fas fa-user"></i>
+                <p>Profile</p>
+              </a>
+            {% endif %}
+          </li>
+          
+          <li class="nav-item">
+            <a href="{% url 'terms' %} " class="btn-default nav-link waves-effect" >
+              <i class="fas fa-file"></i>
+              <p>Terms</p>
             </a>
-          {% endif %}
         </li>
-        
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
-          <a href="{% url 'terms' %} " class="btn-default nav-link waves-effect" >
-            <span class="clearfix d-none d-sm-inline-block"> Terms of Service </span>
+          <a href="{% url 'friends_list' %} " class="btn-default nav-link waves-effect" >
+            <i class="fas fa-users"></i>
+            <p>Friends</p>
           </a>
-      </li>
-      {% if request.user.is_authenticated %}
-      <li class="nav-item">
-        <a href="{% url 'friends_list' %} " class="btn-default nav-link waves-effect" >
-          <span class="clearfix d-none d-sm-inline-block"> Friends List </span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'messages' %} " class="btn-default nav-link waves-effect" >
-          <span class="clearfix d-none d-sm-inline-block"> Chat</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'players_looking_for_group_on_your_elo' %} " class="btn-default nav-link waves-effect" >
-          <span class="clearfix d-none d-sm-inline-block"> Search Group To Play </span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'users_list' %} " class="btn-default nav-link waves-effect" >
-          <span class="clearfix d-none d-sm-inline-block"> Ranking List </span>
-        </a>
-      </li>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'messages' %} " class="btn-default nav-link waves-effect" >
+            <i class="fas fa-comments"></i>
+            <p>Chat</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'players_looking_for_group_on_your_elo' %} " class="btn-default nav-link waves-effect" >
+            <i class="fas fa-search"></i>
+            <p>Group</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'users_list' %} " class="btn-default nav-link waves-effect" >
+            <i class="fas fa-chart-bar"></i>
+            <p>Leaderboard</p>
+          </a>
+        </li>
+  
+        <li class="nav-item">
+          <a href="{% url 'create_team' %} " class="btn-default nav-link waves-effect" >
+            <i class="fas fa-users-cog"></i>
+            <p>Create team</p>
+          </a>
+        </li>
 
-      <li class="nav-item">
-        <a href="{% url 'create_team' %} " class="btn-default nav-link waves-effect" >
-          <span class="clearfix d-none d-sm-inline-block"> Create Team </span>
-        </a>
-      </li>
+        <li class="nav-item">
+          <a href="{% url 'tournaments_list' %} " class="btn-default nav-link waves-effect" >
+            <i class="fas fa-trophy"></i>
+            <p>Tournaments</p>
+          </a>
+        </li>
         <li class="nav-item">
           <a href="{% url 'logout' %} " class="btn-default nav-link waves-effect" >
-            <span class="clearfix d-none d-sm-inline-block"> Logout </span>
+            <i class="fas fa-sign-out-alt"></i>
+            <p>Logout</p>
           </a>
         </li>
-
-        {% else %}
-
-        <li class="nav-item">
-          <a href="{% url 'login' %} " class="btn-default nav-link waves-effect" >
-            <span class="clearfix d-none d-sm-inline-block"> Login </span>
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a href="{% url 'signup' %}" class="btn-default nav-link waves-effect">
-            <span class="clearfix d-none d-sm-inline-block"> Signup </span>
-          </a>
-        </li>
-
-        {% endif %}
-      </ul>
+  
+          {% else %}
+  
+          <li class="nav-item">
+            <a href="{% url 'login' %} " class="btn-default nav-link waves-effect" >
+              <i class="fas fa-sign-in-alt"></i>
+              <p>Login</p>
+            </a>
+          </li>
+  
+          <li class="nav-item">
+            <a href="{% url 'signup' %}" class="btn-default nav-link waves-effect">
+              <i class="fas fa-user-plus"></i>
+              <p>Sign up</p>
+            </a>
+          </li>
+  
+          {% endif %}
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+  
 <body>
