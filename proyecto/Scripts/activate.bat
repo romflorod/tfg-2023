@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\us\tfg\proyectFramework\tfg-2023\proyecto
+set VIRTUAL_ENV=C:\Users\pablo\OneDrive\Desktop\IngSoftwareUS\TFG-2023\tfg-2023\proyecto
 
 if not defined PROMPT set PROMPT=$P$G
 
