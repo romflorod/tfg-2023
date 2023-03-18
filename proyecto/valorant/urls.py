@@ -43,7 +43,10 @@ urlpatterns = [
     path('create_tournament/', user_views.create_tournament, name='create_tournament'),
     path('tournaments_results/<int:tournament_id>/', user_views.tournament_results, name='tournaments_results'),
     path('tournaments_list/', user_views.tournaments_list, name='tournaments_list'),
+    path('tournaments_list/', user_views.tournaments_list, name='tournaments_list'),
     path('tournament/<int:tournament_id>/', user_views.tournament_detail, name='tournament_detail'),
+    path('tournament_matches/<int:tournament_id>/', user_views.tournament_matches, name='tournament_matches'),
+    path('<int:tournament_id>/simulate_match/<int:match_id>/', user_views.simulate_match, name='simulate_match'),
     path('match/<int:match_id>/', user_views.match_detail, name='match_detail'),
     ]
 

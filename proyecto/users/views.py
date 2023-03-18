@@ -15,6 +15,53 @@ import random
 import requests
 import json
 from django.db.models import Q
+
+
+@login_required
+def simulate_match(request, tournament_id, match_id):
+    tournament = Tournament.objects.get(id=tournament_id)
+    match = Match.objects.get(pk=match_id)
+    matches = match.tournament.all()
+
+    for match in matches:
+        score1 = int(request.POST.get(f'score1_{match.id}'))
+        score2 = int(request.POST.get(f'score2_{match.id}'))
+
+        # Actualizamos el score del partido
+        match.score1 = score1
+        match.score2 = score2
+        match.save()
+
+        # Simulamos el partido y actualizamos el ganador
+        if score1 > score2:
+            match.winner = match.equipo1
+        elif score2 > score1:
+            match.winner = match.equipo2
+        else:
+            match.winner = None
+        match.save()
+
+    return redirect('users/tournament_detail', tournament_id=tournament_id)
+
+@login_required
+def tournament_matches(request, tournament_id):
+    tournament = Tournament.objects.get(id=tournament_id)
+    matches = Match.objects.filter(tournament=tournament)
+
+    if request.method == 'POST':
+        for match in matches:
+            score1 = int(request.POST['score1_' + str(match.id)])
+            score2 = int(request.POST['score2_' + str(match.id)])
+            match.score1 = score1
+            match.score2 = score2
+            match.save()
+
+        # Redirigir al usuario de vuelta a la página de partidos del torneo
+        return redirect('tournament_matches', tournament_id=tournament_id)
+
+    context = {'tournament': tournament, 'matches': matches}
+    return render(request, 'users/tournament_matches.html', context)
+
 @login_required
 def messages(request, username=None):
     user = request.user

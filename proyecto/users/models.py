@@ -50,6 +50,7 @@ class Team(models.Model):
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
     teams = models.ManyToManyField(Team)
+    #tournamentmatches = models.ManyToManyField(Match)
     status = models.CharField(max_length=20, choices=STATUSCHOICES, default='open')
     winner = models.ForeignKey(Team, related_name='tournament_winner', on_delete=models.CASCADE, null=True, blank=True)
 
@@ -103,6 +104,8 @@ class Match(models.Model):
     tournament = models.ForeignKey(Tournament, related_name='matches', on_delete=models.CASCADE)
     team1 = models.ForeignKey(Team, related_name='team1_matches', on_delete=models.CASCADE)
     team2 = models.ForeignKey(Team, related_name='team2_matches', on_delete=models.CASCADE)
+    score1 = models.IntegerField(null=True, blank=True)
+    score2 = models.IntegerField(null=True, blank=True)
     winner = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True, related_name='won_matches')
     stage = models.CharField(max_length=2, choices=STAGECHOICES, default='O')
 
