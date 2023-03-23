@@ -3,15 +3,18 @@
 {% block content %}
 <h2>{{ tournament.nombre }}</h2>
 {% for match in matches %}
-  <form method="post" action="{% url 'simulate_match' tournament.id match.id %}">
-    {% csrf_token %}
-    <h4>{{ match.team1.name }} vs. {{ match.team2.name }}</h4>
-    <label>{{ match.equipo1.nombre }}:</label>
-    <input type="number" name="score1_{{ match.id }}" value="{{ match.score1 }}" required>
-    <label>{{ match.equipo2.nombre }}:</label>
-    <input type="number" name="score2_{{ match.id }}" value="{{ match.score2 }}" required>
-    <br><br>
+  {% if not match.winner %}
+    <form method="post" action="{% url 'simulate_match' tournament.id match.id %}">
+        {% csrf_token %}
+        <h4>{{ match.team1.name }} vs. {{ match.team2.name }}</h4>
+        <label>{{ match.equipo1.nombre }}:</label>
+        <input type="number" name="score1_{{ match.id }}" value="{{ match.score1 }}" required>
+        <label>{{ match.equipo2.nombre }}:</label>
+        <input type="number" name="score2_{{ match.id }}" value="{{ match.score2 }}" required>
+        <br><br>
+        {% endif %}
   {% endfor %}
-  <button type="submit">Guardar resultados</button>
-</form>
+      <button type="submit">Guardar resultados</button>
+    </form>
+
 {% endblock %}

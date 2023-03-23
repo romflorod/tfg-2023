@@ -20,9 +20,9 @@ from django.db.models import Q
 @login_required
 def simulate_match(request, tournament_id, match_id):
     tournament = Tournament.objects.get(id=tournament_id)
-    match = Match.objects.get(pk=match_id)
-    matches = match.tournament.all()
+    matches = Match.objects.filter(tournament=tournament)
 
+    winners = []
     for match in matches:
         score1 = int(request.POST.get(f'score1_{match.id}'))
         score2 = int(request.POST.get(f'score2_{match.id}'))
@@ -34,14 +34,23 @@ def simulate_match(request, tournament_id, match_id):
 
         # Simulamos el partido y actualizamos el ganador
         if score1 > score2:
-            match.winner = match.equipo1
+            match.winner = match.team1
+            winners.append(match.team1)
         elif score2 > score1:
-            match.winner = match.equipo2
+            match.winner = match.team2
+            winners.append(match.team2)
         else:
             match.winner = None
         match.save()
+    tournament.teams.set(winners)
+    tournament.save()
+    context = {
+        'tournament': tournament,
+        'matches': matches,
+        'winners': winners
+    }
 
-    return redirect('users/tournament_detail', tournament_id=tournament_id)
+    return render(request, 'users/tournament_matches.html', context)
 
 @login_required
 def tournament_matches(request, tournament_id):
@@ -55,6 +64,7 @@ def tournament_matches(request, tournament_id):
             match.score1 = score1
             match.score2 = score2
             match.save()
+            
 
         # Redirigir al usuario de vuelta a la página de partidos del torneo
         return redirect('tournament_matches', tournament_id=tournament_id)
@@ -90,7 +100,21 @@ def messages(request, username=None):
 @login_required
 def tournament_detail(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
-    context = {'tournament': tournament}
+    matches = []
+    if(tournament.teams.count()<5):
+       
+        #entramos a cuartos.
+        teams = list(tournament.teams.all())
+        match1 = Match(team1=teams[0], team2=teams[1], tournament_id=tournament.id)
+        match2 = Match(team1=teams[2], team2=teams[3], tournament_id=tournament.id)
+        match1.save()
+        match2.save()
+        matches.append(match1)
+        matches.append(match2)
+        
+
+        print("pablo maricon")
+    context = {'tournament': tournament, 'matches': matches}
     return render(request, 'users/tournament_detail.html', context)
 
 @login_required
@@ -210,8 +234,13 @@ def create_team(request):
         elif len(players) < 5:
             form.add_error(None, 'Please select five players for the team.')
         else:
-            team = Team.objects.create(name=name)
-            team.players.add(*players)
+            team = Team.objects.create(name=name, player1=players[0], player2=players[1], player3=players[2], player4=players[3], player5=players[4])
+            team.player1 = players[0]
+            team.player2 = players[1]
+            team.player3 = players[2]
+            team.player4 = players[3]
+            team.player5 = players[4]
+            team.save()
             return redirect('home')
     return render(request, 'users/create_team.html', {'form': form})
 
