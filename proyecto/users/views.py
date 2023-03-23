@@ -118,6 +118,11 @@ def tournament_detail(request, tournament_id):
         match1.save()
         matches.append(match1)
         print(match1)
+    elif(tournament.teams.count()==1):
+        teams = list(tournament.teams.all())
+        tournament.winner=teams[0]
+        tournament.status='completed'
+        tournament.save()
 
         print("pablo maricon y roman bujarra")
     context = {'tournament': tournament, 'matches': matches}

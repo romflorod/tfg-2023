@@ -9,7 +9,7 @@
     {% endfor %}
   </ul>
   <p>Status: {{ tournament.status }}</p>
-  {% if tournament.status == 'closed' %}
-    <p>Winner: {{ tournament.winner.name }}</p>
+  {% if tournament.status == 'completed' %}
+    <p>Congratulations {{ tournament.winner.name }}!, you have won the {{ tournament.name }} </p>
   {% endif %}
 {% endblock %}
