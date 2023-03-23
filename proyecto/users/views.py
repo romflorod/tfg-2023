@@ -20,7 +20,8 @@ from django.db.models import Q
 @login_required
 def simulate_match(request, tournament_id, match_id):
     tournament = Tournament.objects.get(id=tournament_id)
-    matches = Match.objects.filter(tournament=tournament)
+    matches = Match.objects.filter(tournament=tournament, winner__isnull=True)
+
 
     winners = []
     for match in matches:
@@ -101,9 +102,9 @@ def messages(request, username=None):
 def tournament_detail(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     matches = []
-    if(tournament.teams.count()<5):
+    if(3<tournament.teams.count()<5):
        
-        #entramos a cuartos.
+        #entramos a semis.
         teams = list(tournament.teams.all())
         match1 = Match(team1=teams[0], team2=teams[1], tournament_id=tournament.id)
         match2 = Match(team1=teams[2], team2=teams[3], tournament_id=tournament.id)
@@ -111,9 +112,14 @@ def tournament_detail(request, tournament_id):
         match2.save()
         matches.append(match1)
         matches.append(match2)
-        
+    elif(2<tournament.teams.count()<3):
+        teams = list(tournament.teams.all())
+        match1 = Match(team1=teams[0], team2=teams[1], tournament_id=tournament.id)
+        match1.save()
+        matches.append(match1)
+        print(match1)
 
-        print("pablo maricon")
+        print("pablo maricon y roman bujarra")
     context = {'tournament': tournament, 'matches': matches}
     return render(request, 'users/tournament_detail.html', context)
 

@@ -100,6 +100,7 @@ class Profile(models.Model):
 
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
     valorantName = models.TextField(max_length=20, blank=True)
     valorantTagline = models.TextField(max_length=7, blank=True)
     valorantRegion = models.TextField(blank=True, choices=REGIONCHOICES)
