@@ -4,6 +4,79 @@
 {% if user.is_authenticated %}
 <html>
   <head>
+    <style>
+      /* Estilo para el contenedor principal */
+        
+      
+      /* Estilo para la sección del ranking */
+      .sidebar {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+      }
+      
+      /* Estilo para el contenido de la sección del ranking */
+      .content {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        margin-top: 20px;
+      }
+      
+      /* Estilo para el título de la página */
+      h1 {
+        font-weight: bold;
+        font-size: 32px;
+        margin-bottom: 20px;
+      }
+      
+      /* Estilo para los subtítulos */
+      h5 {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      
+      /* Estilo para la etiqueta de usuario */
+      .text-secondary {
+        font-weight: bold;
+        font-size: 18px;
+      }
+      
+      /* Estilo para el botón de editar perfil */
+      .btn-default {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+      
+      /* Estilo para el botón de editar perfil al pasar el mouse */
+      .btn-default:hover {
+        background-color: #0062cc;
+      }
+      
+      /* Estilo para el texto del botón de editar perfil */
+      .aligned {
+        vertical-align: middle;
+      }
+      
+      /* Estilo para el mensaje de inicio de sesión */
+      .login-message {
+        font-size: 18px;
+        font-weight: bold;
+      }
+ 
+      
+      id_password {
+        display: none;
+      }
+      
+      
+    </style>
+    
     <script>
       {% if user.profile.valorantLeague == "error" %}
         alert("Valorant account not found");

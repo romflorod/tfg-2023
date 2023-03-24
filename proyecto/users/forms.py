@@ -51,7 +51,7 @@ class EditProfileForm(UserChangeForm):
     class Meta:
         model = Profile
         fields = ('birth_date','valorantName','valorantRegion','valorantTagline')
-
+     
 class SignupForm(UserCreationForm):
 
     first_name = forms.CharField(max_length=50, required=False, help_text='Optional.')
