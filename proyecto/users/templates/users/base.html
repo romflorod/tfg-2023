@@ -97,6 +97,20 @@
             display: flex;
             background-color: lightgrey;
             align-items: center;
+            color: grey;
+        }
+
+        .sidebar li a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+
+        .sidebar li a:hover {
+            background-color: #666;
         }
           
         .sidebar li:hover {
@@ -108,6 +122,7 @@
             font-family: 'Font Awesome 5 Free';
             font-weight: 900;
             margin-right: 10px;
+            color: white;
         }
           
         .sidebar li a[href*="create_team"]:before {
@@ -129,15 +144,33 @@
         .sidebar li a[href*="tournament_detail"]:before {
             content: "\f205";
         }
-          
-          /* Estilos para dispositivos móviles */
+        .menu-toggle {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 25px;
+            margin-bottom: 5px;
+            background-color: #fff;
+        }
+        
         @media screen and (max-width: 768px) {
             .sidebar {
-              left: -100%;
+                left: -100%;
             }
             
             .sidebar.show {
-              left: 0;
+                left: 0;
             }
         }
     </style>
