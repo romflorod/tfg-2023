@@ -1,9 +1,11 @@
+from datetime import timezone
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from users.models import Profile, Tournament,Message
 from users.models import Team
+from django.utils import timezone
 from django.forms import DateInput
 
 REGIONCHOICES=[
@@ -65,3 +67,9 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'birth_date', 'password1', 'password2','valorantName','valorantRegion','valorantTagline')
+    
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data['birth_date']
+        if birth_date > timezone.now():
+            raise forms.ValidationError("Birth date cannot be in the future.")
+        return birth_date
