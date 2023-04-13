@@ -51,6 +51,7 @@ class AuthenticationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Please enter a correct username and password.")
 
+
 class TeamTest(TestCase):
     
     def setUp(self):
@@ -69,6 +70,7 @@ class TeamTest(TestCase):
 
     def test_team_creation(self):
         self.assertEqual(self.team.__str__(), 'Test Team')
+    
         
     def test_team_player_names(self):
         self.assertEqual(self.team.player1.username, 'testuser1')
