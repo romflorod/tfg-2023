@@ -49,10 +49,20 @@ class EditProfileForm(UserChangeForm):
     valorantName = forms.CharField(max_length=20, required=True, help_text='Required. Enter your valorantname.')
     valorantRegion = forms.CharField(required=True, widget=forms.Select(choices=REGIONCHOICES))
     valorantTagline = forms.CharField(max_length=7, required=True, help_text='Required. Enter your tagline. Format: AAA')
+    
 
     class Meta:
         model = Profile
         fields = ('birth_date','valorantName','valorantRegion','valorantTagline')
+
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data['birth_date'].date()
+        age = (timezone.now().date() - birth_date).days // 365 # Calcular edad en años
+        if age < 18:
+            raise forms.ValidationError("You must be at least 18 years old to register.")
+        if birth_date > timezone.now():
+            raise forms.ValidationError("Birth date cannot be in the future.")
+        return birth_date
      
 class SignupForm(UserCreationForm):
 
@@ -69,7 +79,10 @@ class SignupForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'birth_date', 'password1', 'password2','valorantName','valorantRegion','valorantTagline')
     
     def clean_birth_date(self):
-        birth_date = self.cleaned_data['birth_date']
+        birth_date = self.cleaned_data['birth_date'].date()
+        age = (timezone.now().date() - birth_date).days // 365 # Calcular edad en años
+        if age < 18:
+            raise forms.ValidationError("You must be at least 18 years old to register.")
         if birth_date > timezone.now():
             raise forms.ValidationError("Birth date cannot be in the future.")
         return birth_date
