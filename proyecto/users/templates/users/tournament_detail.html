@@ -1,6 +1,105 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
+<body>
+  <style>
+    /* Estilo para el contenedor principal */
+
+    .auxcontainer {
+      top: 1000px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+    
+    /* Estilo para la sección del ranking */
+    .sidebar {
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    }
+    
+    /* Estilo para el contenido principal */
+    .content {
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    }
+    
+    /* Estilo para las tarjetas */
+    .card {
+      border: none;
+      margin-bottom: 20px;
+    }
+    
+    /* Estilo para los títulos */
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    /* Estilo para la lista de usuarios */
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    /* Estilo para los elementos de la lista */
+    
+    /* Estilo para los botones */
+    button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    body {
+      text-align: center;
+    }
+    
+    /* Estilo para los botones de enviar solicitud de amigo */
+    button[type="submit"] {
+      background-color: red;
+    }
+    
+    /* Estilo para los estados de conexión */
+    span {
+      font-size: 14px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    
+    span.online {
+      color: green;
+    }
+    
+    span.disconnected {
+      color: red;
+    }
+    
+    span.looking-for-group {
+      color: orange;
+    }
+    
+    /* Estilo para las etiquetas */
+    .tag {
+      background-color: #ccc;
+      color: #fff;
+      font-size: 12px;
+      padding: 2px 5px;
+      border-radius: 5px;
+      margin-right: 5px;
+    }
+    div.row > div.col-md-3 > h5:nth-of-type(2) {
+      display: none;
+    }
+</style>
+<div class="auxcontainer">
   <h1>{{ tournament.name }}</h1>
   <p>Teams:</p>
   <ul>
@@ -12,4 +111,6 @@
   {% if tournament.status == 'completed' %}
     <p>Congratulations {{ tournament.winner.name }}!, you have won the {{ tournament.name }} </p>
   {% endif %}
+  
+</div>
 {% endblock %}

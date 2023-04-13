@@ -1,5 +1,4 @@
 {% extends 'users/base.html' %}
-
 {% block content %}
   <h1>Tournaments</h1>
   <ul>
@@ -11,19 +10,18 @@
   </ul>
 
 <body>
-    <button class="menu-toggle">
-      <span class="sr-only">Toggle Menu</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <div class="sidebar">
+
+    <div class="sidebar" style="top:80px">
+      <div class="menu-wrapper">
+        <button class="menu-toggle" style="top:35px;">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      <div>
       <ul>
-        <li><a href="{% url 'create_team' %}">Create Team</a></li>
+        <li style="top:50px"><a href="{% url 'create_team' %}">Create Team</a></li>
         <li><a href="{% url 'create_tournament' %}">Create Tournament</a></li>
-        <li><a href="{% url 'tournaments_results' tournament_id=1 %}">Tournament Results</a></li>
-        <li><a href="{% url 'tournaments_list' %}">Tournaments List</a></li>
-        <li><a href="{% url 'tournament_detail' tournament_id=1 %}">Tournament Detail</a></li>
       </ul>
     </div>
 <body>
