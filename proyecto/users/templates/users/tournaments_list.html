@@ -3,6 +3,7 @@
   <h1>Tournaments</h1>
   <ul>
     {% for tournament in tournaments %}
+    
       <li><a href="{% url 'tournament_detail' tournament.pk %}">{{ tournament.name }}</a></li>
     {% empty %}
       <li>No tournaments to display</li>
@@ -10,7 +11,6 @@
   </ul>
 
 <body>
-
     <div class="sidebar" style="top:80px">
       <div class="menu-wrapper">
         <button class="menu-toggle" style="top:35px;">

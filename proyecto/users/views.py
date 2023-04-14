@@ -14,6 +14,7 @@ from django.http import HttpResponseForbidden,HttpResponseBadRequest
 import random
 import requests
 import json
+from django.urls import reverse
 from django.db.models import Q
 
 
@@ -50,13 +51,15 @@ def simulate_match(request, tournament_id, match_id):
         'matches': matches,
         'winners': winners
     }
+    redirect('tournament_detail', tournament_id=tournament_id)
 
-    return render(request, 'users/tournament_matches.html', context)
+    return redirect(reverse('tournament_detail', args=[tournament.id]))
 
 @login_required
 def tournament_matches(request, tournament_id):
     tournament = Tournament.objects.get(id=tournament_id)
     matches = Match.objects.filter(tournament=tournament)
+    teams = list(tournament.teams.all())
 
     if request.method == 'POST':
         for match in matches:
@@ -68,7 +71,7 @@ def tournament_matches(request, tournament_id):
             
 
         # Redirigir al usuario de vuelta a la página de partidos del torneo
-        return redirect('tournament_matches', tournament_id=tournament_id)
+        redirect('tournament_detail', tournament_id=tournament_id)
 
     context = {'tournament': tournament, 'matches': matches}
     return render(request, 'users/tournament_matches.html', context)
@@ -101,6 +104,9 @@ def messages(request, username=None):
 @login_required
 def tournament_detail(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
+    matchesAux = Match.objects.filter(tournament=tournament)
+    teams = list(tournament.teams.all())
+    teamsInt = len(teams)
     matches = []
     if(3<tournament.teams.count()<5):
        
@@ -108,24 +114,25 @@ def tournament_detail(request, tournament_id):
         teams = list(tournament.teams.all())
         match1 = Match(team1=teams[0], team2=teams[1], tournament_id=tournament.id)
         match2 = Match(team1=teams[2], team2=teams[3], tournament_id=tournament.id)
-        match1.save()
-        match2.save()
-        matches.append(match1)
-        matches.append(match2)
-    elif(2<tournament.teams.count()<3):
+        print(len(matchesAux))
+        if(len(matchesAux)<5):
+            match1.save()
+            match2.save()
+            matches.append(match1)
+            matches.append(match2)
+    elif(1<tournament.teams.count()<3):
         teams = list(tournament.teams.all())
         match1 = Match(team1=teams[0], team2=teams[1], tournament_id=tournament.id)
-        match1.save()
-        matches.append(match1)
-        print(match1)
+        if(len(matchesAux)<7):
+            match1.save()
+            matches.append(match1)
     elif(tournament.teams.count()==1):
         teams = list(tournament.teams.all())
         tournament.winner=teams[0]
         tournament.status='completed'
         tournament.save()
 
-        print("pablo maricon y roman bujarra")
-    context = {'tournament': tournament, 'matches': matches}
+    context = {'tournament': tournament, 'matches': matches, 'teamsInt': teamsInt}
     return render(request, 'users/tournament_detail.html', context)
 
 @login_required
@@ -188,16 +195,9 @@ def create_tournament(request):
                     break
 
                 matches = winners
+            return redirect('tournaments_list')
 
             # Mostrar los resultados del torneo
-            rounds = {
-                'quarterfinals': [[team.name for team in match.teams.all()] for match in tournament.matches.filter(stage='Q')],
-                'semifinals': [[team.name for team in match.teams.all()] for match in tournament.matches.filter(stage='S')],
-                'final': [team.name for team in tournament.matches.filter(stage='F')],
-            }
-
-            context = {'tournament': tournament, 'rounds': rounds}
-            return render(request, 'users/create_tournament.html', context)
     else:
         form = TournamentForm()
 

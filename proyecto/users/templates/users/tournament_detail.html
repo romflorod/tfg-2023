@@ -111,6 +111,14 @@
   {% if tournament.status == 'completed' %}
     <p>Congratulations {{ tournament.winner.name }}!, you have won the {{ tournament.name }} </p>
   {% endif %}
-  
+  {% if teamsInt == 8 %}
+    <a class="a2" href="{% url 'tournament_matches' tournament.pk %}">Introducir resultados de los Cuartos de Final</a>
+  {% endif %}
+  {% if teamsInt == 4 %}
+    <a class="a2" href="{% url 'tournament_matches' tournament.pk %}">Introducir resultados de las Semifinales</a>
+  {% endif %}
+  {% if teamsInt == 2 %}
+    <a class="a2" href="{% url 'tournament_matches' tournament.pk %}">Introducir resultado de la Final</a>
+  {% endif %}
 </div>
 {% endblock %}
