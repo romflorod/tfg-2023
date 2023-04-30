@@ -14,7 +14,47 @@
 <body>
   <style>
     /* Estilo para el contenedor principal */
-      
+    .buttoncontainer {
+      text-align: center;
+      font-size: 35px;
+    }
+    
+    .buttoncontainer a {
+      position: relative;
+      text-decoration: none;
+      display: inline-block;
+      color: #fff;
+      font-weight: bold;
+      transition: all 0.3s ease-out;
+    }
+    .buttoncontainer a:hover {
+      text-decoration: none;
+    }
+    .buttoncontainer a:hover:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 100%;
+      height: 2px;
+      background-color: #fff;
+      transition: all 0.3s ease-out;
+      animation: wave 0.7s infinite;
+    }
+    
+    @keyframes wave {
+      0% {
+        transform: scaleX(0);
+      }
+      50% {
+        transform: scaleX(1);
+      }
+      100% {
+        transform: scaleX(0);
+      }
+    }
+    
+   
     
     /* Estilo para la sección del ranking */
     .sidebar {
@@ -76,7 +116,21 @@
       font-size: 18px;
       font-weight: bold;
     }
+
     
+    id_password {
+      display: none;
+    }
+    
+    .form-group {
+      text-align: center;
+      font-size: 35px;
+    }
+    @keyframes pulse {
+      0% { background-color: red; }
+      50% { background-color: orange; }
+      100% { background-color: white; }
+  }
   </style>
   
   <div class="container" style="">
@@ -180,9 +234,20 @@
                 </div>
               </div>
             </div>
-            <div class="card mb-3 content">
-              <h1 class="m-3">ELO: {{user.profile.valorantCalculatedElo}}</h1>
+            <div class="buttoncontainer">
+              <a href="#">
+                <span>Update profile</span>
+              </a>
             </div>
+            
+            
+            
+            
+            <div class="card mb-3 content" style="animation: pulse 2s infinite;">
+              <h1 class="m-3" style="font-size: 40px; text-align: center;">
+                  <span style="color: black;">ELO:</span> {{user.profile.valorantCalculatedElo}}
+              </h1>
+          </div>
           </div>
         </div>
       </div>
@@ -192,14 +257,7 @@
 
 </body>
 </html>
-<div class ="container">
-  <div class = "vertical-center">
-      <a href="{% url 'editprofile' request.user.profile.id %}" class="btn-default nav-link waves-effect" >
-          <!--@{{user.id}}-->
-          <span class="clearfix d-none d-sm-inline-block aligned"> Edit my profile </span>
-      </a>
-  </div>
-</div>
+
 {% else%}
 <p>Inicie sesión para poder ver su perfil</p>
 

@@ -4,7 +4,6 @@
 <body>
   <style>
     /* Estilo para el contenedor principal */
-
     .auxcontainer {
       top: 1000px;
       max-width: 1200px;
@@ -13,42 +12,47 @@
       background-color: #f5f5f5;
       font-family: Arial, sans-serif;
     }
-    
+  
     /* Estilo para la sección del ranking */
     .sidebar {
       background-color: #fff;
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,.1);
     }
-    
+  
     /* Estilo para el contenido principal */
     .content {
       background-color: #fff;
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,.1);
     }
-    
+  
     /* Estilo para las tarjetas */
     .card {
       border: none;
       margin-bottom: 20px;
     }
-    
+  
     /* Estilo para los títulos */
     h1 {
       font-size: 24px;
       font-weight: bold;
       color: #333;
+      text-decoration: underline;
+      margin-bottom: 10px;
     }
-    
+  
     /* Estilo para la lista de usuarios */
     ul {
       list-style: none;
       padding: 0;
     }
-    
+  
     /* Estilo para los elementos de la lista */
-    
+    li {
+      margin-bottom: 10px;
+    }
+  
     /* Estilo para los botones */
     button {
       background-color: #4CAF50;
@@ -58,34 +62,35 @@
       border-radius: 5px;
       cursor: pointer;
     }
+  
     body {
       text-align: center;
     }
-    
+  
     /* Estilo para los botones de enviar solicitud de amigo */
     button[type="submit"] {
       background-color: red;
     }
-    
+  
     /* Estilo para los estados de conexión */
     span {
       font-size: 14px;
       font-weight: bold;
       margin-left: 10px;
     }
-    
+  
     span.online {
       color: green;
     }
-    
+  
     span.disconnected {
       color: red;
     }
-    
+  
     span.looking-for-group {
       color: orange;
     }
-    
+  
     /* Estilo para las etiquetas */
     .tag {
       background-color: #ccc;
@@ -95,10 +100,36 @@
       border-radius: 5px;
       margin-right: 5px;
     }
+  
     div.row > div.col-md-3 > h5:nth-of-type(2) {
       display: none;
     }
-</style>
+  
+    /* Estilo para el contenedor de información del jugador */
+    .player-info {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+  
+    /* Estilo para el título de la información del jugador */
+    .player-info h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+  
+    /* Estilo para la información del jugador */
+    .player-info ul {
+      margin-left: 20px;
+    }
+  
+    /* Estilo para la información del jugador: etiquetas */
+    .player-info .tag {
+      margin-right: 10px;
+    }
+  </style>
+  
   <div class="auxcontainer">
     <div clas="main">
       <div class="row">

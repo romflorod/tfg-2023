@@ -74,7 +74,50 @@
         display: none;
       }
       
+      .buttoncontainer {
+        text-align: center;
+        font-size: 35px;
+      }
       
+      .buttoncontainer a {
+        position: relative;
+        text-decoration: none;
+        display: inline-block;
+        color: #fff;
+        font-weight: bold;
+        transition: all 0.3s ease-out;
+      }
+      .buttoncontainer a:hover {
+        text-decoration: none;
+      }
+      .buttoncontainer a:hover:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+        width: 100%;
+        height: 2px;
+        background-color: #fff;
+        transition: all 0.3s ease-out;
+        animation: wave 0.7s infinite;
+      }
+      
+      @keyframes wave {
+        0% {
+          transform: scaleX(0);
+        }
+        50% {
+          transform: scaleX(1);
+        }
+        100% {
+          transform: scaleX(0);
+        }
+      }
+      @keyframes pulse {
+        0% { background-color: red; }
+        50% { background-color: orange; }
+        100% { background-color: white; }
+    }
     </style>
     
     <script>
@@ -105,6 +148,8 @@
                 <form method="post">
                   {% csrf_token %}
                   {% for field in form %}
+                  {% if field.name != 'password' %}  <!-- excluye el campo de contraseña -->
+
                   <div class="row">
                     <div class="col-md-3">
                       <h5>{{ field.label_tag }}</h5>
@@ -121,15 +166,22 @@
                       <p style="color: red">{{ error }}</p>
                       {% endfor %}
                   </p>
+                    {% endif %}
                   {% endfor %}
-                  <div class = "form-group">
-                  <button type="submit">Update profile</button>
+                  <div class="buttoncontainer">
+                    <a href="#">
+                      <span>Update profile</span>
+                    </a>
+                  </div>
+                  
                 </form>
               </div>
             </div>
-            <div class="card mb-3 content">
-              <h1 class="m-3">ELO: {{user.profile.valorantCalculatedElo}}</h1>
-            </div>
+            <div class="card mb-3 content" style="animation: pulse 2s infinite;">
+              <h1 class="m-3" style="font-size: 40px; text-align: center;">
+                  <span style="color: black;">ELO:</span> {{user.profile.valorantCalculatedElo}}
+              </h1>
+          </div>
           </div>
         </div>
       </div>
