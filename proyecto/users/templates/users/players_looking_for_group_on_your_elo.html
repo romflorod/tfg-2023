@@ -5,7 +5,21 @@
 <body>
   <style>
     /* Estilo para el contenedor principal */
-
+    .info-item {
+      
+      font-size: 28px;
+      line-height: 24px;
+      color: green;
+    }
+    
+    .info-item strong {
+      font-weight: bold;
+      margin-right: 2px;
+    }
+    .info-item:hover {
+      box-shadow: 0px 0px 10px 5px green;
+    }
+    
     .auxcontainer {
       top: 1000px;
       max-width: 1200px;
@@ -120,32 +134,36 @@
                 <div class="row">
                   <ul>
                     {% for user in users %}
-                    <li>Valorant Name: {{ user.profile.valorantName }}
+                    <li class="info-item"><strong>Valorant Name:</strong> {{ user.profile.valorantName }}</li>
+                    <br>
                     {% if user.profile.looking_for_group %}
                       <span style="color: orange;">Looking for group</span>
                     {% endif %}
-                      <ul>
-                        <li>Tagline: {{ user.profile.valorantTagline }}</li>
-                        <li>Web Username: {{ user.username }}</li>
-                        <li>Last Game Kills: {{ user.profile.valorantKills }}</li>
-                        <li>Last Game Deaths: {{ user.profile.valorantDeaths }}</li>
-                        <li>Calculated elo: {{ user.profile.valorantCalculatedElo }}</li>
-                        {% if user.profile.is_online %}
-                          <span style="color: green;">Online </span>
-                        {% else %}
-                          <span style="color: red;">Disconnected</span>
-                        {% endif %}
-                        {% if user not in friends %}
-                          <li>
-                            <form action="{% url 'add_friend' friend_id=user.id %}" method="POST">
-                              {% csrf_token %}
-                              <button type="submit">Send frend request</button>
-                            </form>
-                          </li>
-                        {% endif %}
-                      </ul>
-                    </li>
+                    <ul>
+                      <li>Tagline: {{ user.profile.valorantTagline }}</li>
+                      <li>Web Username: {{ user.username }}</li>
+                      <li>Last Game Kills: {{ user.profile.valorantKills }}</li>
+                      <li>Last Game Deaths: {{ user.profile.valorantDeaths }}</li>
+                      <li>Calculated elo: {{ user.profile.valorantCalculatedElo }}</li>
+                      {% if user.profile.is_online %}
+                        <span style="color: green;">Online </span>
+                      {% else %}
+                        <span style="color: red;">Disconnected</span>
+                      {% endif %}
+                      <li>
+                        <a href="{% url 'messages' username=user.username %}" style="color:purple; font-size: 14px; background-color: purple; color: white; padding: 5px;">Send message</a>
+                      </li>
+                      {% if user not in friends and user not in friends2 %}
+                        <li>
+                          <form action="{% url 'add_friend' friend_id=user.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit">Send friend request</button>
+                          </form>
+                        </li>
+                      {% endif %}
+                    </ul>
                   {% endfor %}
+                  
                   </ul>
                 </div>
               </div>

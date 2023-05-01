@@ -3,6 +3,21 @@
 {% block content %}
 <body>
   <style>
+    .info-item {
+      
+      font-size: 28px;
+      line-height: 24px;
+      color: green;
+    }
+    
+    .info-item strong {
+      font-weight: bold;
+      margin-right: 2px;
+    }
+    .info-item:hover {
+      box-shadow: 0px 0px 10px 5px green;
+    }
+    
     /* Estilo para el contenedor principal */
     .auxcontainer {
       top: 1000px;
@@ -51,6 +66,8 @@
     /* Estilo para los elementos de la lista */
     li {
       margin-bottom: 10px;
+      font-size: 26px;
+
     }
   
     /* Estilo para los botones */
@@ -71,7 +88,7 @@
     button[type="submit"] {
       background-color: red;
     }
-  
+    
     /* Estilo para los estados de conexión */
     span {
       font-size: 14px;
@@ -146,34 +163,38 @@
           <div class="card mb-3 content">
             <h1 class="m-3 pt-3">Total number of users registered: {{ userContInt }}</h1>
             <h1 class="m-3 pt-3">Users Online: {{usersOnline}}</h1>
+            <hr>
             <div class="w3-sidebar w3-bar-block" style="width:100%">
               <div class="card-body">
                 <div class="row">
                   <ul>
                     {% for user in users %}
-                    <li>Valorant Name: {{ user.profile.valorantName }}
+                    <li class="info-item"><strong>Valorant Name:</strong> {{ user.profile.valorantName }}</li>
                     {% if user.profile.looking_for_group %}
-                      <span style="color: orange;">Looking for group</span>
-                    {% endif %}
-                      <ul>
-                        <li>Tagline: {{ user.profile.valorantTagline }}</li>
-                        <li>Web Username: {{ user.username }}</li>
-                        <li>Last Game Kills: {{ user.profile.valorantKills }}</li>
-                        <li>Last Game Deaths: {{ user.profile.valorantDeaths }}</li>
-                        <li>Calculated elo: {{ user.profile.valorantCalculatedElo }}</li>
-                        {% if user.profile.is_online %}
+                        <span style="color: orange;">Looking for group</span>
+                      {% endif %}
+                        <ul>
+                          <li>Tagline: {{ user.profile.valorantTagline }}</li>
+                          <li>Web Username: {{ user.username }}</li>
+                          <li>Last Game Kills: {{ user.profile.valorantKills }}</li>
+                          <li>Last Game Deaths: {{ user.profile.valorantDeaths }}</li>
+                          <li>Calculated elo: {{ user.profile.valorantCalculatedElo }}</li>
+                          {% if user.profile.is_online %}
                           <span style="color: green;">Online</span>
                         {% else %}
                           <span style="color: red;">Disconnected</span>
                         {% endif %}
+                      
                         {% if user not in friends and useraux != user %}
                           <li>
                             <form action="{% url 'add_friend' friend_id=user.id %}" method="POST">
                               {% csrf_token %}
+                              
                               <button type="submit">Send friend request</button>
                             </form>
                           </li>
                         {% endif %}
+                        <hr>
                       </ul>
                     </li>
                   {% endfor %}

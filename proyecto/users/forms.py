@@ -83,6 +83,6 @@ class SignupForm(UserCreationForm):
         age = (timezone.now().date() - birth_date).days // 365 # Calcular edad en años
         if age < 18:
             raise forms.ValidationError("You must be at least 18 years old to register.")
-        if birth_date > timezone.now():
+        if birth_date > timezone.now().date():
             raise forms.ValidationError("Birth date cannot be in the future.")
         return birth_date

@@ -113,11 +113,12 @@
         </div>
         <div  class="col-md8 mt-1">
           <div class="card mb-3 content">
-            <h1 class="m-3 pt-3">Valorant Name: {{user.profile.valorantName}}</h1>
+            <h1 class="m-3 pt-3">Your Valorant Name: {{user.profile.valorantName}}</h1>
             <div class="w3-sidebar w3-bar-block" style="width:100%">
               <div class="card-body">
                 <div class="row">
                   <ul>
+                    <hr>
                     {% for friend in friends %}
                       <li>Valorant Name: {{ friend.profile.valorantName }}
                           <ul>
@@ -139,8 +140,11 @@
                                   <button type="submit">Delete friend</button>
                                 </form>
                               </li>
-                          </ul>
-                      </li>
+                              <br>
+                              <li><a href="{% url 'messages' username=friend.username %}" style="background-color: purple; color: white; font-size: 14px; padding: 5px;">Chat with {{ friend.username }}</a></li>
+                            </li>
+                            <br>
+                            <hr>
                     {% empty %}
                       <li>You have no friends.</li>
                     {% endfor %}

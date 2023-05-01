@@ -273,9 +273,21 @@ def players_looking_for_group_on_your_elo(request):
         if booleanoAux and booleanoAux2 and booleanoAux3:
             filtered_users.append(usuario)
             contador=contador+1
+    useraux = request.user
+    friends2 = []
+    friend_requests = FriendRequest.objects.filter(Q(sender=useraux) | Q(receiver=useraux))
+    for friend_request in friend_requests:
+        # Agregar el remitente a la lista de amigos si el usuario actual es el receptor
+        if friend_request.receiver == useraux:
+            friends2.append(friend_request.sender)
+        # Agregar el receptor a la lista de amigos si el usuario actual es el remitente
+        elif friend_request.sender == useraux:
+            friends2.append(friend_request.receiver)
     context = {'users': filtered_users}
     context.update({'cont': contador})
     context.update({'friends': friends })
+    context.update({'friends_pending': friends2 })
+
     return render(request, 'users/players_looking_for_group_on_your_elo.html', context)
 
 def users_list(request):
@@ -285,13 +297,26 @@ def users_list(request):
     useraux = request.user
     friendsaux = useraux.profile.friends.all()
     
+    # Obtener las solicitudes de amistad que involucran al usuario actual
+    friend_requests = FriendRequest.objects.filter(Q(sender=useraux) | Q(receiver=useraux))
+    friends = []
+
+    for friend_request in friend_requests:
+        # Agregar el remitente a la lista de amigos si el usuario actual es el receptor
+        if friend_request.receiver == useraux:
+            friends.append(friend_request.sender)
+        # Agregar el receptor a la lista de amigos si el usuario actual es el remitente
+        elif friend_request.sender == useraux:
+            friends.append(friend_request.receiver)
+
     context = {'users': users}
-    context.update({'friends': friendsaux})
+    context.update({'friends': friends})
     context.update({'userContInt': len(userCont)})
     context.update({'usersOnline': len(usersConnected)})
     context.update({'useraux': useraux})
 
     return render(request, 'users/users_list.html', context)
+
 
 @login_required
 def accept_friend_request(request, friend_request_id):
@@ -310,8 +335,6 @@ def accept_friend_request(request, friend_request_id):
 @login_required
 def reject_friend_request(request, friend_request_id):
     friend_request = get_object_or_404(FriendRequest, id=friend_request_id)
-    print("holaaaaaaaa")
-    print(friend_request_id)
     parseintid=int(friend_request_id)
     context = {'idDelete': parseintid}
     return render(request, 'users/friends_list.html',context)
@@ -323,17 +346,20 @@ def friends_list(request):
     context = {'friends': friends}
     return render(request, 'users/friends_list.html',context)#preguntar como hacer la redirección
 
+from django.http import HttpResponseBadRequest
+
 @login_required
 def add_friend(request, friend_id):
     friend = get_object_or_404(User, id=friend_id)
     if(request.user.profile.id == friend_id):
-        return HttpResponseBadRequest("Cant add yourself as a friend")
+        return HttpResponseBadRequest("Can't add yourself as a friend.")
     else:
         friend_request, created = FriendRequest.objects.get_or_create(sender=request.user, receiver=friend)
 
     if not created:
-        return redirect('users_list') # La solicitud ya existe
+        return HttpResponseBadRequest("Friend request already exists.") # La solicitud ya existe
     return redirect('users_list')
+
 
 @login_required
 def delete_friend(request, friend_id):
