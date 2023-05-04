@@ -48,7 +48,20 @@
     .btn-default.nav-link.waves-effect.grey {
       background: #b3b3b3 !important;
     }
+
+    @media only screen and (max-width: 768px) {
+      .navbar-collapse {
+      display: none;
+      }
+      
+      .navbar-collapse.show {
+      display: flex;
+      flex-direction: column;
+      }
+      }
   </style>
+
+</head>
 
 </head>
 
@@ -63,7 +76,9 @@
       <a class="navbar-brand" href="/">
         <strong class="blue-text"></strong>
       </a>
-      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <!-- Links -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
   
@@ -155,5 +170,14 @@
       </div>
     </div>
   </nav>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const navbarToggler = document.querySelector(".navbar-toggler");
+      const navbarCollapse = document.querySelector(".navbar-collapse");
   
+      navbarToggler.addEventListener("click", function() {
+        navbarCollapse.classList.toggle("show");
+      });
+    });
+  </script>
 <body>
