@@ -114,7 +114,6 @@ def tournament_detail(request, tournament_id):
         teams = list(tournament.teams.all())
         match1 = Match(team1=teams[0], team2=teams[1], tournament_id=tournament.id)
         match2 = Match(team1=teams[2], team2=teams[3], tournament_id=tournament.id)
-        print(len(matchesAux))
         if(len(matchesAux)<5):
             match1.save()
             match2.save()
@@ -264,9 +263,7 @@ def players_looking_for_group_on_your_elo(request):
     filtered_users = []
     contador = 0
     for usuario in users:
-        print(usuario.profile.valorantCalculatedElo)
         eloBucleAux = int(usuario.profile.valorantCalculatedElo)
-        print(eloBucleAux)
         booleanoAux = (abs(eloBucleAux - intElo) < 100)
         booleanoAux2 = bool(usuario.profile.looking_for_group)
         booleanoAux3 = bool(usuario.profile.is_online)##booleano 3 is online, meter dentro del  and
@@ -372,18 +369,7 @@ def delete_friend(request, friend_id):
     return redirect('friends_list')
 
 
-"""
-    friend = User.objects.get(id=friend_id)
-    request.user.profile.friends.add(friend)
-    request.user.save()
-    friend_id=friend.profile.id + 1
-    print(friend_id)
-    friend.profile.friends.add(User.objects.get(id=request.user.profile.id))
-    #friend to me, a partir de friend
-    # saco el usuario con un get id del user
-    #
-    return redirect('profile', pk=request.user.profile.pk)
-"""
+
 class EditProfileView(UpdateView):
     model = Profile
     template_name = 'editprofile.html'

@@ -126,5 +126,4 @@ class Profile(models.Model):
             Profile.objects.create(user=instance)
 
     def get_absolute_url(self):
-        print("entro¿¿")
         return "/"
